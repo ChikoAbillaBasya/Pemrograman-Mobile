@@ -2,9 +2,6 @@
 <p align="center">
   <img src="https://3.bp.blogspot.com/-whSxEvHuEds/VOBUC7I5NNI/AAAAAAAAAUY/qfk23ch5o_c/s1600/logo_polinema_by_adminkerapolinema-d3b0ojd.jpg" alt="Logo Polinema" width="120">
 </p>
-
----
-
 <h2 align="center">JOBSHEET 02</h2>
 <h3 align="center">Pengantar Bahasa Pemrograman Dart</h3>
 <div align="center">
