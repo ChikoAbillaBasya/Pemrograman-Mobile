@@ -1,21 +1,37 @@
-<h1 align="center">LAPORAN PRAKTIKUM PEMROGRAMAN MOBILE</h1>
-<p align="center">
-  <img src="https://3.bp.blogspot.com/-whSxEvHuEds/VOBUC7I5NNI/AAAAAAAAAUY/qfk23ch5o_c/s1600/logo_polinema_by_adminkerapolinema-d3b0ojd.jpg" alt="Logo Polinema" width="120">
-</p>
-<h2 align="center">JOBSHEET 02</h2>
-<h3 align="center">Pengantar Bahasa Pemrograman Dart</h3>
 <div align="center">
-  <h4><strong>Dosen Pengampu:</strong></h4>
-  <p>Habibie Ed Dien, S.Kom., M.T.</p>
-  <h4><strong>Disusun oleh:</strong></h4>
-  <p>Chiko Abilla Basya</p>
-  <p>2341720005</p>
-  <p>TI-3G</p>
-  <p>D-4 Teknik Informatika</p>
-  <p>Politeknik Negeri Malang</p>
-  <p>Jl. Soekarno Hatta No.9, Jatimulyo, Kec. Lowokwaru, Kota Malang, Jawa Timur 65141</p>
-  <p><strong>Phone</strong>: (0341) 404424, 404425</p>
-  <p><strong>Email</strong>: <a href="https://www.polinema.ac.id">Polinema.ac.id</a></p>
+
+# LAPORAN PRAKTIKUM  
+## PEMROGRAMAN MOBILE  
+
+<img src="https://3.bp.blogspot.com/-whSxEvHuEds/VOBUC7I5NNI/AAAAAAAAAUY/qfk23ch5o_c/s1600/logo_polinema_by_adminkerapolinema-d3b0ojd.jpg" alt="Logo Polinema" width="140"/>
+
+---
+
+## JOBSHEET 02  
+### Pengantar Bahasa Pemrograman Dart  
+
+---
+
+### Dosen Pengampu:  
+Habibie Ed Dien, S.Kom., M.T.
+
+---
+
+### Disusun oleh:  
+Chiko Abilla Basya  
+2341720005  
+TI-3G  
+D-4 Teknik Informatika  
+Polinema Negeri Malang
+
+---
+
+Jl. Soekarno Hatta No.9, Jatimulyo,  
+Kec. Lowokwaru, Kota Malang, Jawa Timur 65141  
+
+(0341) 404424, 404425  
+[Polinema.ac.id](https://www.polinema.ac.id)  
+
 </div>
 
 ---
