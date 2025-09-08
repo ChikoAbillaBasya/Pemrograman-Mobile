@@ -12,7 +12,7 @@
 
 ---
 
-**Dosen Pengampu:**  
+**Dosen Pengampu:**
 Habibie Ed Dien, S.Kom., M.T.
 
 ---
