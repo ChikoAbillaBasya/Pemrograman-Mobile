@@ -129,9 +129,9 @@ Apa yang terjadi? Jika terjadi error, silakan perbaiki namun tetap menggunakan f
 
 ## Tugas Praktikum
 
-1. **Silakan selesaikan Praktikum 1 sampai 3, lalu dokumentasikan berupa screenshot hasil pekerjaan beserta penjelasannya!**
+**1. Silakan selesaikan Praktikum 1 sampai 3, lalu dokumentasikan berupa screenshot hasil pekerjaan beserta penjelasannya!**
 
-2. **Buatlah sebuah program yang dapat menampilkan bilangan prima dari angka 0 sampai 201 menggunakan Dart. Ketika bilangan prima ditemukan, maka tampilkan nama lengkap dan NIM Anda.**
+**2. Buatlah sebuah program yang dapat menampilkan bilangan prima dari angka 0 sampai 201 menggunakan Dart. Ketika bilangan prima ditemukan, maka tampilkan nama lengkap dan NIM Anda.**
 
    **Kode Program**  
    ![Kode Program Tugas](img/Kode_Tugas.png)
@@ -139,4 +139,4 @@ Apa yang terjadi? Jika terjadi error, silakan perbaiki namun tetap menggunakan f
    **Output**  
    ![Output Tugas 1](img/Output_Tugas1.png) ![Output Tugas 2](img/Output_Tugas2.png) 
 
-3. **Kumpulkan berupa link commit repo GitHub pada tautan yang telah disediakan di grup Telegram!**
+**3. Kumpulkan berupa link commit repo GitHub pada tautan yang telah disediakan di grup Telegram!**
