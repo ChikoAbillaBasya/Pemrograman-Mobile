@@ -7,8 +7,8 @@
 
 ---
 
-## JOBSHEET 02  
-### Pengantar Bahasa Pemrograman Dart  
+## JOBSHEET 01  
+### Pengantar Bahasa Pemrograman Dart - Bagian 1
 
 ---
 
@@ -22,15 +22,15 @@ Chiko Abilla Basya
 2341720005  
 TI-3G  
 D-4 Teknik Informatika  
-Polinema Negeri Malang
+Politeknik Negeri Malang
 
 ---
 
 Jl. Soekarno Hatta No.9, Jatimulyo,  
 Kec. Lowokwaru, Kota Malang, Jawa Timur 65141  
 
-(0341) 404424, 404425  
-[Polinema.ac.id](https://www.polinema.ac.id)  
+Phone: (0341) 404424, 404425  
+Email: [Polinema.ac.id](https://www.polinema.ac.id)  
 
 </div>
 
