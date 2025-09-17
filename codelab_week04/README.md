@@ -224,7 +224,7 @@ Apa yang terjadi ? Jika terjadi error, silakan perbaiki.
 
 Tambahkan variabel list berisi NIM Anda menggunakan Spread Operators. Dokumentasikan hasilnya dan buat laporannya!
 
-![alt text](img/P4_langkah3.png)
+![alt text](img/P4_Langkah3.png)
 
 ![alt text](img/P4_Output3.png)
 
