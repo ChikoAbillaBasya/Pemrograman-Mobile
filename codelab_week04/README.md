@@ -57,10 +57,14 @@ assert(list[1] == 1);
 print(list[1]);
 ```
 
+**Kode Program**
+
 ![alt text](img/P1_Langkah1.png) 
 
 ### Langkah 2:
 Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jelaskan!
+
+**Output**
 
 ![alt text](img/P1_Output1.png)
 
@@ -71,7 +75,11 @@ Ubah kode pada langkah 1 menjadi variabel final yang mempunyai index = 5 dengan 
 
 Apa yang terjadi ? Jika terjadi error, silakan perbaiki.
 
+**Kode Program**
+
 ![alt text](img/P1_Langkah3.png)
+
+**Output**
 
 ![alt text](img/P1._Output3.png)
 
@@ -91,10 +99,14 @@ var halogens = {'fluorine', 'chlorine', 'bromine', 'iodine', 'astatine'};
 print(halogens);
 ```
 
+**Kode Program**
+
 ![alt text](img/P2_Langkah1.png)
 
 ### Langkah 2:
 Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jelaskan! Lalu perbaiki jika terjadi error.
+
+**Output**
 
 ![alt text](img/P2_Output1.png)
 
@@ -117,7 +129,11 @@ Apa yang terjadi ? Jika terjadi error, silakan perbaiki namun tetap menggunakan 
 
 Dokumentasikan code dan hasil di console, lalu buat laporannya.
 
+**Kode Program**
+
 ![alt text](img/P2_Langkah3.png)
+
+**Output**
 
 ![alt text](img/P2_Output3.png)
 
@@ -150,10 +166,14 @@ print(gifts);
 print(nobleGases);
 ```
 
+**Kode Program**
+
 ![alt text](img/P3_Langkah1.png)
 
 ### Langkah 2:
 Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jelaskan! Lalu perbaiki jika terjadi error.
+
+**Output**
 
 ![alt text](img/P3_Output1.png)
 
@@ -178,7 +198,11 @@ Apa yang terjadi ? Jika terjadi error, silakan perbaiki.
 
 Tambahkan elemen nama dan NIM Anda pada tiap variabel di atas (`gifts`, `nobleGases`, `mhs1`, dan `mhs2`). Dokumentasikan hasilnya dan buat laporannya!
 
+**Kode Program**
+
 ![alt text](img/P3_Langkah3.png)
+
+**Output**
 
 ![alt text](img/P3_Output3.png)
 
@@ -201,10 +225,14 @@ print(list2);
 print(list2.length);
 ```
 
+**Kode Program**
+
 ![alt text](img/P4_Langkah1.png)
 
 ### Langkah 2:
 Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jelaskan! Lalu perbaiki jika terjadi error.
+
+**Output**
 
 ![alt text](img/P4_Output1.png)
 
@@ -224,7 +252,11 @@ Apa yang terjadi ? Jika terjadi error, silakan perbaiki.
 
 Tambahkan variabel list berisi NIM Anda menggunakan Spread Operators. Dokumentasikan hasilnya dan buat laporannya!
 
+**Kode Program**
+
 ![alt text](img/P4_Langkah3.png)
+
+**Output**
 
 ![alt text](img/P4_Output3.png)
 
@@ -240,7 +272,11 @@ print(nav);
 
 Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Tunjukkan hasilnya jika variabel promoActive ketika `true` dan `false`.
 
+**Kode Program**
+
 ![alt text](img/P4_Langkah4.png)
+
+**Output**
 
 ![alt text](img/P4_Output4.png)
 
@@ -256,7 +292,11 @@ print(nav2);
 
 Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Tunjukkan hasilnya jika variabel `login` mempunyai kondisi lain.
 
+**Kode Program**
+
 ![alt text](img/P4_Langkah5.png)
+
+**Output**
 
 ![alt text](img/P4_Output5.png)
 
@@ -274,7 +314,11 @@ print(listOfStrings);
 
 Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Jelaskan manfaat Collection For dan dokumentasikan hasilnya.
 
+**Kode Program**
+
 ![alt text](img/P4_Langkah6.png)
+
+**Output**
 
 ![alt text](img/P4_Output6.png)
 
@@ -296,10 +340,14 @@ var record = ('first', a: 2, b: true, 'last');
 print(record)
 ```
 
+**Kode Program**
+
 ![alt text](img/P5_Langkah1.png)
 
 ### Langkah 2:
 Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jelaskan! Lalu perbaiki jika terjadi error.
+
+**Output**
 
 ![alt text](img/P5_Output1.png)
 
@@ -317,7 +365,11 @@ Tambahkan kode program berikut di luar scope `void main()`, lalu coba eksekusi (
 
 Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Gunakan fungsi `tukar()` di dalam `main()` sehingga tampak jelas proses pertukaran value field di dalam Records.
 
+**Kode Program**
+
 ![alt text](img/P5_Langkah3.png)
+
+**Output**
 
 ![alt text](img/P5_Output3.png)
 
@@ -334,7 +386,11 @@ print(mahasiswa);
 
 Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Inisialisasi field nama dan NIM Anda pada variabel record `mahasiswa` di atas. Dokumentasikan hasilnya dan buat laporannya!
 
+**Kode Program**
+
 ![alt text](img/P5_Langkah4.png)
+
+**Output**
 
 ![alt text](img/P5_Output4.png)
 
@@ -354,7 +410,11 @@ print(mahasiswa2.$2); // Prints 'last'
 
 Apa yang terjadi ? Jika terjadi error, silakan perbaiki. Gantilah salah satu isi record dengan nama dan NIM Anda, lalu dokumentasikan hasilnya dan buat laporannya!
 
+**Kode Program**
+
 ![alt text](img/P5_Langkah5.png)
+
+**Output**
 
 ![alt text](img/P5_Output5.png)
 
