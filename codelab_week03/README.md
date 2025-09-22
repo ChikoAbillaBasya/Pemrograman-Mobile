@@ -43,6 +43,19 @@ Selesaikan langkah-langkah praktikum berikut ini menggunakan DartPad di browser 
 ### Langkah 1
 Ketik atau salin kode program berikut ke dalam fungsi `main()`.
 
+```dart
+String test = "test2";
+if (test == "test1") {
+   print("Test1");
+} else If (test == "test2") {
+   print("Test2");
+} Else {
+   print("Something else");
+}
+
+if (test == "test2") print("Test2 again");
+```
+
 **Kode Program**  
 ![Kode Program Praktikum 1 Langkah 1](img/Kode_P1_langkah1.png)
 
@@ -57,13 +70,22 @@ Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jela
 ### Langkah 3
 Tambahkan kode program berikut, lalu coba eksekusi (Run) kode Anda.
 
+```dart
+String test = "true";
+if (test) {
+   print("Kebenaran");
+}
+```
+
+Apa yang terjadi ? Jika terjadi error, silakan perbaiki namun tetap menggunakan if/else.
+
 **Kode Program**  
 ![Kode Program Praktikum 1 Langkah 3](img/Kode_P1_langkah3.png)
 
 **Output**  
 ![Output Praktikum 1 Langkah 3](img/Output_P1_langkah3.png)
 
-> Program menambahkan conditional statement dengan String yang bernilai "true" dan "false". Ketika menggunakan operator `==` untuk membandingkan String "true" dengan boolean true, hasilnya adalah false karena keduanya memiliki tipe data yang berbeda (String vs bool). Oleh karena itu, kedua kondisi if tidak dijalankan. Untuk membuat kondisi bekerja dengan benar, String "true" perlu dikonversi menjadi boolean menggunakan parsing atau menggunakan perbandingan String yang tepat.
+> Program mengalami error karena dalam Dart, kondisi if harus berupa boolean (true/false), sedangkan variabel test bertipe String. Untuk memperbaikinya, perlu menggunakan perbandingan seperti `if (test == "true")` atau konversi yang tepat. Program menambahkan conditional statement dengan String yang bernilai "true" dan "false". Ketika menggunakan operator `==` untuk membandingkan String "true" dengan boolean true, hasilnya adalah false karena keduanya memiliki tipe data yang berbeda (String vs bool). Oleh karena itu, kedua kondisi if tidak dijalankan. Untuk membuat kondisi bekerja dengan benar, String "true" perlu dikonversi menjadi boolean menggunakan parsing atau menggunakan perbandingan String yang tepat.
 
 ---
 
@@ -74,6 +96,13 @@ Selesaikan langkah-langkah praktikum berikut ini menggunakan DartPad di browser 
 ### Langkah 1
 Ketik atau salin kode program berikut ke dalam fungsi `main()`.
 
+```dart
+while (counter < 33) {
+  print(counter);
+  counter++;
+}
+```
+
 **Kode Program**  
 ![Kode Program Praktikum 2 Langkah 1](img/Kode_P2_langkah1.png)
 
@@ -83,20 +112,27 @@ Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jela
 **Output**  
 ![Output Praktikum 2 Langkah 1](img/Output_P2_langkah1.png)
 
-> Variabel counter diawali dengan nilai 0. Selama nilai counter masih lebih kecil dari 33, perulangan while akan terus dijalankan. Pada setiap putaran, nilai counter dicetak ke layar lalu ditambah satu. Ketika nilai counter mencapai 33, kondisi `while (counter < 33)` menjadi salah, sehingga perulangan berhenti.
+> Terjadi error karena variabel counter belum dideklarasikan. Perlu menambahkan `int counter = 0;` sebelum perulangan while. Setelah diperbaiki, variabel counter diawali dengan nilai 0. Selama nilai counter masih lebih kecil dari 33, perulangan while akan terus dijalankan. Pada setiap putaran, nilai counter dicetak ke layar lalu ditambah satu. Ketika nilai counter mencapai 33, kondisi `while (counter < 33)` menjadi salah, sehingga perulangan berhenti.
 
 ### Langkah 3
 Tambahkan kode program berikut, lalu coba eksekusi (Run) kode Anda.
 
-**Kode Program**  
-![Kode Program Praktikum 2 Langkah 3](img/Kode_P2_langkah3.png)
+```dart
+do {
+  print(counter);
+  counter++;
+} while (counter < 77);
+```
 
 Apa yang terjadi? Jika terjadi error, silakan perbaiki namun tetap menggunakan do-while.
+
+**Kode Program**  
+![Kode Program Praktikum 2 Langkah 3](img/Kode_P2_langkah3.png)
 
 **Output**  
 ![Output Praktikum 2 Langkah 3.1](img/Output_P2_langkah3.1.png) ![Output Praktikum 2 Langkah 3.2](img/Output_P2_langkah3.2.png) ![Output Praktikum 2 Langkah 3.3](img/Output_P2_langkah3.3.png)
 
-> Program menggunakan perulangan do-while yang berbeda dengan while biasa. Pada do-while, blok kode di dalam do akan dieksekusi terlebih dahulu, baru kemudian kondisi di while diperiksa. Hal ini menjamin bahwa kode di dalam do akan dijalankan minimal satu kali, bahkan jika kondisinya false dari awal. Dalam contoh ini, variabel counter mulai dari 33, dan meskipun kondisi `while (counter < 33)` sudah false dari awal, statement print tetap dieksekusi satu kali sebelum perulangan berhenti.
+> Program menggunakan perulangan do-while yang berbeda dengan while biasa. Pada do-while, blok kode di dalam do akan dieksekusi terlebih dahulu, baru kemudian kondisi di while diperiksa. Hal ini menjamin bahwa kode di dalam do akan dijalankan minimal satu kali, bahkan jika kondisinya false dari awal. Dalam contoh ini, variabel counter melanjutkan dari nilai 33 (hasil perulangan sebelumnya) dan berlanjut sampai mencapai 77. Perulangan do-while akan mencetak nilai dari 33 hingga 76.
 
 ---
 
@@ -107,6 +143,12 @@ Selesaikan langkah-langkah praktikum berikut ini menggunakan DartPad di browser 
 ### Langkah 1
 Ketik atau salin kode program berikut ke dalam fungsi `main()`.
 
+```dart
+for (Index = 10; index < 27; index) {
+  print(Index);
+}
+```
+
 **Kode Program**  
 ![Kode Program Praktikum 3 Langkah 1](img/Kode_P3_langkah1.png)
 
@@ -116,20 +158,26 @@ Silakan coba eksekusi (Run) kode pada langkah 1 tersebut. Apa yang terjadi? Jela
 **Output**  
 ![Output Praktikum 3 Langkah 1](img/Output_P3_langkah1.png)
 
-> Variabel index dimulai dengan nilai 10. Selama nilai index masih kurang dari 27, perulangan akan terus dijalankan. Pada setiap putaran, nilai index dicetak ke layar kemudian ditambah satu. Perulangan akan berhenti ketika nilai index mencapai 27.
+> Terjadi beberapa error: variabel `Index` tidak konsisten dengan `index`, tidak ada deklarasi tipe data, dan tidak ada increment. Setelah diperbaiki menjadi `for (int index = 10; index < 27; index++)`, variabel index dimulai dengan nilai 10. Selama nilai index masih kurang dari 27, perulangan akan terus dijalankan. Pada setiap putaran, nilai index dicetak ke layar kemudian ditambah satu. Perulangan akan berhenti ketika nilai index mencapai 27.
 
 ### Langkah 3
 Tambahkan kode program berikut di dalam for-loop, lalu coba eksekusi (Run) kode Anda.
 
-**Kode Program**  
-![Kode Program Praktikum 3 Langkah 3](img/Kode_P3_langkah3.png)
+```dart
+If (Index == 21) break;
+Else If (index > 1 || index < 7) continue;
+print(index);
+```
 
 Apa yang terjadi? Jika terjadi error, silakan perbaiki namun tetap menggunakan for dan break-continue.
+
+**Kode Program**  
+![Kode Program Praktikum 3 Langkah 3](img/Kode_P3_langkah3.png)
 
 **Output**  
 ![Output Praktikum 3 Langkah 3](img/Output_P3_langkah3.png)
 
-> Program menambahkan control flow statements yaitu `break` dan `continue` di dalam perulangan for. Statement `if (index == 21) break;` akan menghentikan perulangan secara paksa ketika nilai index mencapai 21. Statement `if (index > 1 || index < 7) continue;` akan melompati eksekusi sisa kode dalam loop dan langsung ke iterasi berikutnya jika kondisi terpenuhi. Namun, karena kondisi `index > 1 || index < 7` selalu true untuk semua nilai dalam range 10-26, maka statement print tidak akan pernah dieksekusi, dan perulangan akan berhenti ketika index mencapai 21 karena break statement.
+> Terjadi error karena `If` dan `Else If` harus ditulis dengan huruf kecil (`if` dan `else if`), serta inconsistency pada nama variabel. Setelah diperbaiki, program menambahkan control flow statements yaitu `break` dan `continue` di dalam perulangan for. Statement `if (index == 21) break;` akan menghentikan perulangan secara paksa ketika nilai index mencapai 21. Statement `if (index > 1 || index < 7) continue;` akan melompati eksekusi sisa kode dalam loop dan langsung ke iterasi berikutnya jika kondisi terpenuhi. Namun, karena kondisi `index > 1 || index < 7` selalu true untuk semua nilai dalam range 10-26, maka statement print tidak akan pernah dieksekusi, dan perulangan akan berhenti ketika index mencapai 21 karena break statement.
 
 ---
 
