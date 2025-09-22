@@ -39,6 +39,9 @@ Email: [Polinema.ac.id](https://www.polinema.ac.id)
 ---
 
 Praktikum 1: Membuat Project Flutter Baru
+
 Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda.
 
 Jika sudah selesai proses pembuatan project baru, pastikan tampilan seperti berikut. Pesan akan tampil berupa "Your Flutter Project is ready!" artinya Anda telah berhasil membuat project Flutter baru.
+
+![alt text](img/Praktikum1.png)
