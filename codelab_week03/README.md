@@ -63,6 +63,8 @@ Tambahkan kode program berikut, lalu coba eksekusi (Run) kode Anda.
 **Output**  
 ![Output Praktikum 1 Langkah 3](img/Output_P1_langkah3.png)
 
+> Program menambahkan conditional statement dengan String yang bernilai "true" dan "false". Ketika menggunakan operator `==` untuk membandingkan String "true" dengan boolean true, hasilnya adalah false karena keduanya memiliki tipe data yang berbeda (String vs bool). Oleh karena itu, kedua kondisi if tidak dijalankan. Untuk membuat kondisi bekerja dengan benar, String "true" perlu dikonversi menjadi boolean menggunakan parsing atau menggunakan perbandingan String yang tepat.
+
 ---
 
 ## Praktikum 2: Menerapkan Perulangan "while" dan "do-while"
@@ -93,6 +95,8 @@ Apa yang terjadi? Jika terjadi error, silakan perbaiki namun tetap menggunakan d
 
 **Output**  
 ![Output Praktikum 2 Langkah 3.1](img/Output_P2_langkah3.1.png) ![Output Praktikum 2 Langkah 3.2](img/Output_P2_langkah3.2.png) ![Output Praktikum 2 Langkah 3.3](img/Output_P2_langkah3.3.png)
+
+> Program menggunakan perulangan do-while yang berbeda dengan while biasa. Pada do-while, blok kode di dalam do akan dieksekusi terlebih dahulu, baru kemudian kondisi di while diperiksa. Hal ini menjamin bahwa kode di dalam do akan dijalankan minimal satu kali, bahkan jika kondisinya false dari awal. Dalam contoh ini, variabel counter mulai dari 33, dan meskipun kondisi `while (counter < 33)` sudah false dari awal, statement print tetap dieksekusi satu kali sebelum perulangan berhenti.
 
 ---
 
@@ -125,6 +129,8 @@ Apa yang terjadi? Jika terjadi error, silakan perbaiki namun tetap menggunakan f
 **Output**  
 ![Output Praktikum 3 Langkah 3](img/Output_P3_langkah3.png)
 
+> Program menambahkan control flow statements yaitu `break` dan `continue` di dalam perulangan for. Statement `if (index == 21) break;` akan menghentikan perulangan secara paksa ketika nilai index mencapai 21. Statement `if (index > 1 || index < 7) continue;` akan melompati eksekusi sisa kode dalam loop dan langsung ke iterasi berikutnya jika kondisi terpenuhi. Namun, karena kondisi `index > 1 || index < 7` selalu true untuk semua nilai dalam range 10-26, maka statement print tidak akan pernah dieksekusi, dan perulangan akan berhenti ketika index mencapai 21 karena break statement.
+
 ---
 
 ## Tugas Praktikum
@@ -138,5 +144,7 @@ Apa yang terjadi? Jika terjadi error, silakan perbaiki namun tetap menggunakan f
 
    **Output**  
    ![Output Tugas 1](img/Output_Tugas1.png) ![Output Tugas 2](img/Output_Tugas2.png) 
+
+> Program ini mencari bilangan prima dari 0 sampai 201 menggunakan algoritma sederhana. Program membuat fungsi `isPrime()` untuk mengecek apakah suatu angka adalah bilangan prima atau bukan. Bilangan prima adalah bilangan yang hanya bisa dibagi oleh 1 dan dirinya sendiri. Dalam perulangan utama, setiap angka dari 0 hingga 201 dicek menggunakan fungsi tersebut. Jika ditemukan bilangan prima, program akan menampilkan angka tersebut beserta nama lengkap "Chiko Abilla Basya" dan NIM "2341720005". Program berhasil menemukan 46 bilangan prima dalam rentang tersebut, dimulai dari 2, 3, 5, 7, hingga 199.
 
 **3. Kumpulkan berupa link commit repo GitHub pada tautan yang telah disediakan di grup Telegram!**
