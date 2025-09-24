@@ -598,6 +598,7 @@ Langkah 6 mengimplementasikan Date Picker yang melibatkan StatefulWidget untuk m
 
 ![alt text](chiko_app/images/image18.png)
 
+![alt text](chiko_app/images/image19.png)
 
 5. README.md berisi: capture hasil akhir tiap praktikum (side-by-side, bisa juga berupa file GIF agar terlihat proses perubahan ketika ada aksi dari pengguna) dengan menampilkan NIM dan Nama Anda sebagai ciri pekerjaan Anda.
 6. Kumpulkan berupa link repository/commit GitHub Anda kepada dosen yang telah disepakati!
