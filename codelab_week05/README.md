@@ -561,5 +561,43 @@ Langkah 6 mengimplementasikan Date Picker yang melibatkan StatefulWidget untuk m
 2. Selesaikan Praktikum 2 dan Anda wajib menjalankan aplikasi hello_world pada perangkat fisik (device Android/iOS) agar Anda mempunyai pengalaman untuk menghubungkan ke perangkat fisik. Capture hasil aplikasi di perangkat, lalu buatlah laporan praktikum pada file README.md.
 3. Pada praktikum 5 mulai dari Langkah 3 sampai 6, buatlah file widget tersendiri di folder basic_widgets, kemudian pada file main.dart cukup melakukan import widget sesuai masing-masing langkah tersebut!
 4. Selesaikan Codelabs: Your first Flutter app, lalu buatlah laporan praktikumnya dan push ke repository GitHub Anda!
+
+![alt text](chiko_app/images/image1.png)
+
+![alt text](chiko_app/images/image2.png)
+
+![alt text](chiko_app/images/image3.png)
+
+![alt text](chiko_app/images/image4.png)
+
+![alt text](chiko_app/images/image5.png)
+
+![alt text](chiko_app/images/image6.png)
+
+![alt text](chiko_app/images/image7.png)
+
+![alt text](chiko_app/images/image8.png)
+
+![alt text](chiko_app/images/image9.png)
+
+![alt text](chiko_app/images/image10.png)
+
+![alt text](chiko_app/images/image11.png)
+
+![alt text](chiko_app/images/image12.png)
+
+![alt text](chiko_app/images/image13.png)
+
+![alt text](chiko_app/images/image14.png)
+
+![alt text](chiko_app/images/image15.png)
+
+![alt text](chiko_app/images/image16.png)
+
+![alt text](chiko_app/images/image17.png)
+
+![alt text](chiko_app/images/image18.png)
+
+
 5. README.md berisi: capture hasil akhir tiap praktikum (side-by-side, bisa juga berupa file GIF agar terlihat proses perubahan ketika ada aksi dari pengguna) dengan menampilkan NIM dan Nama Anda sebagai ciri pekerjaan Anda.
 6. Kumpulkan berupa link repository/commit GitHub Anda kepada dosen yang telah disepakati!
