@@ -490,8 +490,6 @@ Sebuah `Route` umumnya dimasukkan (push) atau diambil (pop) dari dan ke tumpukan
 
 ![Navigator](layout_flutter/images/Navigator.png)
 
-**Penjelasan:** Navigation di Flutter menggunakan konsep stack (LIFO - Last In First Out) untuk mengelola halaman. Navigator widget bertindak sebagai controller yang mengelola route stack ini. Ketika user navigasi ke halaman baru (push), halaman tersebut ditambahkan ke top of stack. Ketika user kembali (pop), halaman teratas dihapus dari stack dan user kembali ke halaman sebelumnya. Named routes memberikan cara yang lebih organized untuk mengelola navigation dalam aplikasi yang kompleks.
-
 ---
 
 ## Praktikum 5: Membangun Navigasi di Flutter
@@ -510,8 +508,6 @@ Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studi
 
 Pada praktikum 5 ini anda akan belajar mengenai pembangunan aplikasi bergerak multi halaman. Aplikasi yang dikembangkan berupa kasus daftar barang belanja. Pada aplikasi ini anda akan belajar untuk berpindah halaman dan mengirimkan data ke halaman lainnya. Gambaran mockup hasil akhir aplikasi dapat anda lihat pada gambar di atas (mockup dibuat sederhana, sehingga Anda mempunyai banyak ruang untuk berkreasi). Desain aplikasi menampilkan sebuah `ListView` widget yang datanya bersumber dari `List`. Ketika item ditekan, data akan dikirimkan ke halaman berikutnya.
 
-**Penjelasan:** Praktikum ini fokus pada implementasi multi-page application dengan navigation dan data passing. Konsep yang akan dipelajari mencakup route management, data transfer antar halaman, dan user interaction handling. Aplikasi belanja dipilih sebagai use case karena representa scenario umum dalam mobile development.
-
 ### Langkah 1: Siapkan project baru
 
 Sebelum melanjutkan praktikum, buatlah sebuah project baru Flutter dengan nama **belanja** dan susunan folder seperti pada gambar berikut. Penyusunan ini dimaksudkan untuk mengorganisasi kode dan widget yang lebih mudah.
@@ -520,15 +516,11 @@ Sebelum melanjutkan praktikum, buatlah sebuah project baru Flutter dengan nama *
 
 ![Belanja Project](belanja/images/belanja.png)
 
-**Penjelasan:** Struktur folder yang terorganisir adalah foundation penting untuk maintainable code. Folder 'pages' untuk menyimpan screen widgets, 'models' untuk data models, dan 'widgets' untuk reusable components. Struktur ini mengikuti best practices dalam Flutter development dan memudahkan kolaborasi tim serta maintenance jangka panjang.
-
 ### Langkah 2: Mendefinisikan Route
 
 Buatlah dua buah file dart dengan nama `home_page.dart` dan `item_page.dart` pada folder **pages**. Untuk masing-masing file, deklarasikan `class HomePage` pada `file home_page`.dart dan `ItemPage` pada `item_page.dart`. Turunkan class dari `StatelessWidget`. Gambaran potongan kode dapat anda lihat sebagai berikut.
 
 ![Route](belanja/images/route.png)
-
-**Penjelasan:** Pembuatan separate files untuk setiap page mengikuti prinsip separation of concerns. StatelessWidget dipilih karena kedua halaman tidak memerlukan internal state management. Penamaan yang descriptive (HomePage, ItemPage) memudahkan understanding dan maintenance code.
 
 ### Langkah 3: Lengkapi Kode di main.dart
 
@@ -536,15 +528,11 @@ Setelah kedua halaman telah dibuat dan didefinisikan, bukalah file `main.dart`. 
 
 ![Initial Route](belanja/images/initialRoute.png)
 
-**Penjelasan:** Named routes memberikan cara yang clean dan scalable untuk mengelola navigation. Route '/' adalah convention untuk home page, sementara '/item' adalah descriptive route untuk item detail page. InitialRoute menentukan halaman pertama yang ditampilkan ketika aplikasi diluncurkan. Routes table dalam MaterialApp menjadi central registry untuk semua available routes dalam aplikasi.
-
 ### Langkah 4: Membuat data model
 
 Sebelum melakukan perpindahan halaman dari `HomePage` ke `ItemPage`, dibutuhkan proses pemodelan data. Pada desain mockup, dibutuhkan dua informasi yaitu nama dan harga. Untuk menangani hal ini, buatlah sebuah file dengan nama `item.dart` dan letakkan pada folder **models**. Pada file ini didefinisikan pemodelan data yang dibutuhkan. Ilustrasi kode yang dibutuhkan, dapat anda lihat pada potongan kode berikut.
 
 ![Model](belanja/images/model.png)
-
-**Penjelasan:** Data model adalah representasi struktur data dalam aplikasi. Class Item dengan properties name dan price menyediakan type-safe way untuk mengelola data produk. Constructor memungkinkan easy instantiation, sementara strong typing membantu prevent runtime errors dan meningkatkan code readability.
 
 ### Langkah 5: Lengkapi kode di class HomePage
 
@@ -552,7 +540,6 @@ Pada halaman `HomePage` terdapat `ListView` widget. Sumber data `ListView` diamb
 
 ![Home Page](belanja/images/homePage.png)
 
-**Penjelasan:** ListView.builder adalah efficient way untuk menampilkan dynamic list data. List items berisi sample data yang akan ditampilkan. Builder pattern memungkinkan lazy loading, dimana widget hanya dibuat ketika diperlukan, mengoptimalkan memory usage dan performance.
 
 ### Langkah 6: Membuat ListView dan itemBuilder
 
@@ -560,7 +547,6 @@ Untuk menampilkan `ListView` pada praktikum ini digunakan `itemBuilder`. Data di
 
 ![Card](belanja/images/card.png)
 
-**Penjelasan:** Card widget memberikan visual separation antar items dengan shadow dan elevation. ItemBuilder callback dipanggil untuk setiap item dalam list, menerima context dan index sebagai parameter. Pattern ini memungkinkan efficient rendering dengan reusing widgets dan hanya building visible items.
 
 Jalankan aplikasi pada emulator atau pada device anda.
 
@@ -573,8 +559,6 @@ Item pada ListView saat ini ketika ditekan masih belum memberikan aksi tertentu.
 Untuk menambahkan sentuhan, letakkan cursor pada widget pembuka `Card`. Kemudian gunakan shortcut quick fix dari VSCode (**Ctrl +** . pada Windows atau **Cmd +** . pada MacOS). Sorot menu `wrap with widget...` Ubah nilai widget menjadi `InkWell` serta tambahkan named argument `onTap` yang berisi fungsi untuk berpindah ke halaman `ItemPage`. Ilustrasi potongan kode dapat anda lihat pada potongan berikut.
 
 ![InkWell](belanja/images/InkWell.png)
-
-**Penjelasan:** InkWell menyediakan Material Design ripple effect ketika di-tap, memberikan visual feedback yang familiar bagi user Android. OnTap callback memungkinkan navigation ke halaman detail. Navigator.pushNamed menggunakan named route yang telah didefinisikan sebelumnya, maintaining consistency dalam navigation pattern.
 
 Jalankan aplikasi kembali dan pastikan ListView dapat disentuh dan berpindah ke halaman berikutnya. Periksa kembali jika terdapat kesalahan.
 
@@ -671,5 +655,3 @@ final itemArgs = ModalRoute.of(context)!.settings.arguments as Item;
 **Penjelasan:** Final output menunjukkan aplikasi e-commerce yang fully functional dengan modern UI, smooth navigation, Hero animations, dan complete product information system. GridView layout memberikan experience yang familiar untuk user mobile shopping apps.
 
 6. Selesaikan Praktikum 5: Navigasi dan Rute tersebut. Cobalah modifikasi menggunakan plugin [go_router](https://pub.dev/packages/go_router), lalu dokumentasikan dan push ke repository Anda berupa screenshot setiap hasil pekerjaan beserta penjelasannya di file `README.md`. Kumpulkan link commit repository GitHub Anda kepada dosen yang telah disepakati!
-
-**Penjelasan:** Go_router adalah modern routing solution untuk Flutter yang menyediakan declarative routing, deep linking support, dan better type safety. Implementation go_router akan mendemonstrasikan alternative approach untuk navigation management dengan additional features seperti route guards dan nested routing capabilities.
