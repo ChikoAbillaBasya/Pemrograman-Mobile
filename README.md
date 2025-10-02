@@ -11,3 +11,4 @@
 |Week 03         |`'Pengantar Bahasa Pemrograman Dart - Bagian 2'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week03
 |Week 04         |`'Pengantar Bahasa Pemrograman Dart - Bagian 3'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week04
 |Week 05         |`'Aplikasi Pertama dan Widget Dasar Flutter'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week05
+|Week 06         |`'Layout dan Navigasi'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week06
