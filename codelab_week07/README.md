@@ -10,7 +10,7 @@
 
 ## JOBSHEET 06
 
-### Manajemen Plugin di Flutter
+### Manajemen Plugin
 
 ---
 
@@ -77,7 +77,7 @@ class RedTextWidget extends StatelessWidget {
 }
 ```
 
-![alt text](flutter_plugin_pubdev/images/langkah3.png)
+![alt text](flutter_plugin_pubdev/images/Langkah3.png)
 
 **Langkah 4: Tambah Widget AutoSizeText**
 
