@@ -13,3 +13,4 @@
 |Week 05         |`'Aplikasi Pertama dan Widget Dasar Flutter'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week05
 |Week 06         |`'Layout dan Navigasi'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week06
 |Week 07         |`'Manajemen Plugin'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week07
+|Week 08         |`'Aplikasi Mobile Jawara'`|https://github.com/Raudhil/mobile_josjis_Kel2
