@@ -136,12 +136,12 @@ class _FuturePageState extends State<FuturePage> {
 ### **Langkah 4: Tambah method getData()**
 Tambahkan method ini ke dalam `class _FuturePageState` yang berguna untuk mengambil data dari API Google Books.
 ```dart
-  Future<Response> getData() async {
-    const authority = 'www.googleapis.com';
-    const path = '/books/v1/volumes/junbDwAAQBAJ';
-    Uri url = Uri.https(authority, path);
-    return http.get(url);
-  }
+Future<Response> getData() async {
+  const authority = 'www.googleapis.com';
+  const path = '/books/v1/volumes/junbDwAAQBAJ';
+  Uri url = Uri.https(authority, path);
+  return http.get(url);
+}
 ```
 
 >#### **Soal 2**
@@ -150,7 +150,7 @@ Tambahkan method ini ke dalam `class _FuturePageState` yang berguna untuk mengam
 >* Kemudian cobalah akses di browser URI tersebut dengan lengkap seperti ini. Jika menampilkan data JSON, maka Anda telah berhasil. Lakukan capture milik Anda dan tulis di `README` pada laporan praktikum. Lalu lakukan commit dengan pesan "**W11: Soal 2**".
 >![alt text](books/images/hasil_praktikum1_soal2.png)
 
-#### **Langkah 5: Tambah kode di ElevatedButton**
+### **Langkah 5: Tambah kode di ElevatedButton**
 Tambahkan kode pada `onPressed` di `ElevatedButton` seperti berikut.
 ```dart
 ElevatedButton(
@@ -213,3 +213,147 @@ Lakukan run aplikasi Flutter Anda. Anda akan melihat tampilan akhir seperti gamb
 - Ketika tombol "GO!" ditekan, aplikasi melakukan request ke Google Books API
 - Setelah data berhasil diambil, ditampilkan 450 karakter pertama dari response JSON
 - CircularProgressIndicator tetap berputar menunjukkan aplikasi tetap responsif
+
+## **Praktikum 2: Menggunakan await/async untuk menghindari callbacks**
+Ada alternatif penggunaan Future yang lebih clean, mudah dibaca dan dirawat, yaitu pola **async/await**. Intinya pada dua kata kunci ini:
+* `async` digunakan untuk menandai suatu method sebagai asynchronous dan itu harus ditambahkan di depan kode function.
+* `await` digunakan untuk memerintahkan menunggu sampai eksekusi suatu function itu selesai dan mengembalikan sebuah value. Untuk then bisa digunakan pada jenis method apapun, sedangkan await hanya bekerja di dalam method async.
+Berikut ini contoh kode perbedaan Future dengan then dan async/await.
+
+Berikut ini contoh kode perbedaan `Future` dengan `then` dan `async/await`.
+
+![alt text](books/images/future.png)
+
+Untuk memahami lebih dalam penggunaan **async/await**, simaklah video berikut.
+
+[![alt text](books/images/async_await.png)](https://youtu.be/SmTCmDMi4BY) 
+
+Setelah Anda menyelesaikan praktikum 1, Anda dapat melanjutkan praktikum 2 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 1.
+
+Pada codelab ini, kita akan menambah kode dari aplikasi **books** di praktikum sebelumnya.
+
+### **Langkah 1: Buka file main.dart**
+Tambahkan tiga method berisi kode seperti berikut di dalam `class _FuturePageState`.
+```dart
+Future<int> returnOneAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 1;
+}
+
+Future<int> returnTwoAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 2;
+}
+
+Future<int> returnThreeAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 3;
+}
+```
+
+### **Langkah 2: Tambah method count()**
+Lalu tambahkan lagi method ini di bawah ketiga method sebelumnya.
+```dart
+Future count() async {
+  int total = 0;
+  total = await returnOneAsync();
+  total += await returnTwoAsync();
+  total += await returnThreeAsync();
+  setState(() {
+    result = total.toString();
+  });
+}
+```
+
+### **Langkah 3: Panggil count()**
+Lakukan comment kode sebelumnya, ubah isi kode onPressed() menjadi seperti berikut.
+```dart
+ElevatedButton(
+   child: const Text('GO!'),
+      onPressed: () {
+          count();
+      },
+}
+```
+
+>**Penjelasan hasil:**
+>- Saat tombol "GO!" ditekan, aplikasi mulai menghitung
+>- Terjadi delay 9 detik (3 detik × 3 operasi async)
+>- Setelah 9 detik, muncul angka "6" sebagai hasil penjumlahan 1 + 2 + 3
+>- CircularProgressIndicator tetap berputar menunjukkan UI tetap responsif selama proses async
+
+### **Langkah 4: Run**
+Akhirnya, **run** atau tekan **F5** jika aplikasi belum running. Maka Anda akan melihat seperti gambar berikut, hasil angka 6 akan tampil setelah delay 9 detik.
+
+![alt text](books/images/hasil_praktikum2_soal4.gif)
+
+**Penjelasan hasil:**
+- Saat tombol "GO!" ditekan, aplikasi mulai menghitung 
+- Terjadi delay 9 detik (3 detik × 3 operasi async)
+- Setelah 9 detik, muncul angka "6" sebagai hasil penjumlahan 1 + 2 + 3
+- CircularProgressIndicator tetap berputar menunjukkan UI tetap responsif selama proses async
+
+>#### **Soal 4**
+>* Jelaskan maksud kode langkah 1 dan 2 tersebut!
+>
+>**Jawab:**
+>
+>**Penjelasan Langkah 1 (Method returnOneAsync, returnTwoAsync, returnThreeAsync):**
+>
+>Ketiga method ini adalah contoh **fungsi asynchronous** yang mengembalikan nilai Future<int>:
+>
+>1. **`Future<int>`**: Menandakan bahwa fungsi ini akan mengembalikan nilai integer di masa depan (tidak langsung/instant)
+>
+>2. **`async`**: Keyword yang menandai bahwa fungsi ini bersifat asynchronous, artinya dapat melakukan operasi yang membutuhkan waktu tanpa memblokir thread utama
+>
+>3. **`await Future.delayed(const Duration(seconds: 3))`**: 
+>     - Menunda eksekusi selama 3 detik
+>     - `await` membuat program menunggu hingga delay selesai sebelum melanjutkan ke baris berikutnya
+>     - Simulasi operasi yang membutuhkan waktu (seperti request API, baca file, dll)
+>
+>4. **`return 1/2/3`**: Setelah delay 3 detik, masing-masing fungsi mengembalikan nilai 1, 2, dan 3
+>
+>**Penjelasan Langkah 2 (Method count):**
+>
+>Method `count()` adalah fungsi asynchronous yang memanggil ketiga fungsi di atas secara **berurutan** (sequential):
+>
+>1. **`Future<void> count() async`**: 
+>     - Fungsi async yang tidak mengembalikan nilai (void)
+>     - Digunakan untuk mengeksekusi operasi async dan update UI
+>
+>2. **`int total = 0`**: Inisialisasi variabel untuk menyimpan total
+>
+>3. **`total = await returnOneAsync()`**: 
+>     - Menunggu 3 detik hingga `returnOneAsync()` selesai
+>     - Mendapat nilai 1, lalu assign ke `total`
+>     - Total sekarang = 1
+>
+>4. **`total += await returnTwoAsync()`**: 
+>     - Menunggu 3 detik lagi hingga `returnTwoAsync()` selesai
+>     - Mendapat nilai 2, lalu tambahkan ke `total`
+>     - Total sekarang = 1 + 2 = 3
+>
+>5. **`total += await returnThreeAsync()`**: 
+>     - Menunggu 3 detik lagi hingga `returnThreeAsync()` selesai
+>     - Mendapat nilai 3, lalu tambahkan ke `total`
+>     - Total sekarang = 3 + 3 = 6
+>
+>6. **`setState(() { result = total.toString(); })`**: 
+>     - Update state untuk memperbarui UI
+>     - Menampilkan hasil total (6) di layar
+>
+>**Total waktu eksekusi: 9 detik** (3 detik × 3 fungsi, karena dijalankan secara berurutan)
+>
+>**Keuntungan menggunakan async/await dibanding then():**
+>
+>a.  Kode lebih mudah dibaca (seperti kode synchronous biasa)
+>
+>b.  Lebih mudah di-maintain
+>
+>c.  Error handling lebih sederhana dengan try-catch
+>
+>d.  Menghindari "callback hell" atau "pyramid of doom"
+> 
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 4**".
