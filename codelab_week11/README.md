@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Future Demo - Chiko',
+      title: 'Future Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -111,7 +111,7 @@ class _FuturePageState extends State<FuturePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Back from the Future')),
+      appBar: AppBar(title: const Text('Back from the Future - Chiko')),
       body: Center(
         child: Column(
           children: [
@@ -149,3 +149,67 @@ Tambahkan method ini ke dalam `class _FuturePageState` yang berguna untuk mengam
 >![alt text](books/images/id_buku.png)
 >* Kemudian cobalah akses di browser URI tersebut dengan lengkap seperti ini. Jika menampilkan data JSON, maka Anda telah berhasil. Lakukan capture milik Anda dan tulis di `README` pada laporan praktikum. Lalu lakukan commit dengan pesan "**W11: Soal 2**".
 >![alt text](books/images/hasil_praktikum1_soal2.png)
+
+#### **Langkah 5: Tambah kode di ElevatedButton**
+Tambahkan kode pada `onPressed` di `ElevatedButton` seperti berikut.
+```dart
+ElevatedButton(
+  child: Text('GO!'),
+  onPressed: (){
+    setState(() {});
+    getData()
+    .then((value) {
+      result = value.body.toString().substring(0, 450);
+      setState(() {});
+    }).catchError((_){
+      result = 'An error occurred';
+      setState(() {});
+    });
+  },
+),
+```
+Lakukan run aplikasi Flutter Anda. Anda akan melihat tampilan akhir seperti gambar berikut. Jika masih terdapat error, silakan diperbaiki hingga bisa running.
+
+>#### **Soal 3**
+>* Jelaskan maksud kode langkah 5 tersebut terkait `substring` dan `catchError`!
+>
+>**Jawab:**
+>
+>**Penjelasan `substring(0, 450)`:**
+>- Method `substring(0, 450)` digunakan untuk **memotong string** dari response body API
+>- Angka `0` adalah **index awal** (karakter pertama)
+>- Angka `450` adalah **index akhir** (karakter ke-450)
+>- Fungsinya untuk **membatasi panjang text** yang ditampilkan karena response JSON dari Google Books API sangat panjang (bisa ribuan karakter)
+>- Jika tidak dibatasi, text akan memenuhi layar dan membuat UI tidak rapi
+>- Dengan membatasi 450 karakter, kita hanya menampilkan sebagian data untuk preview
+>
+>**Penjelasan `catchError`:**
+>- `catchError()` adalah method untuk **menangani error** (error handling) pada operasi asynchronous
+>- Jika terjadi error saat proses `getData()` (misal: tidak ada koneksi internet, timeout, API error, dll), maka blok `catchError` akan dieksekusi
+>- Parameter `(_)` menggunakan underscore karena kita tidak menggunakan object error-nya
+>- Di dalam catchError, kita set `result = 'An error occurred'` untuk memberi tahu user bahwa terjadi kesalahan
+>- `setState()` dipanggil untuk memperbarui UI dan menampilkan pesan error
+>
+>**Alur kerja kode:**
+>1. User menekan tombol "GO!"
+>2. `setState()` pertama dipanggil untuk trigger rebuild (opsional)
+>3. `getData()` dipanggil secara asynchronous (mengambil data dari API)
+>4. **Jika berhasil**: 
+>    - `.then()` dijalankan
+>    - Response body diambil 450 karakter pertama
+>    - Disimpan ke variabel `result`
+>    - `setState()` dipanggil untuk update UI
+>5. **Jika gagal**:
+>    - `.catchError()` dijalankan
+>    - `result` diisi dengan pesan error
+>    - `setState()` dipanggil untuk update UI
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 3**".
+
+![alt text](books/images/hasil_praktikum1_soal3.gif)
+
+**Penjelasan hasil:**
+- Saat aplikasi pertama kali dibuka, menampilkan tombol "GO!" dan CircularProgressIndicator
+- Ketika tombol "GO!" ditekan, aplikasi melakukan request ke Google Books API
+- Setelah data berhasil diambil, ditampilkan 450 karakter pertama dari response JSON
+- CircularProgressIndicator tetap berputar menunjukkan aplikasi tetap responsif
