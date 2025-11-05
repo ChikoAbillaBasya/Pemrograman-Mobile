@@ -1182,3 +1182,158 @@ Widget build(BuildContext context) {
 >c. Untuk web, gunakan package lain yang support web seperti `geolocator_web`
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 12**".
+
+## ***Praktikum 7: Manajemen Future dengan FutureBuilder***
+Pola ketika menerima beberapa data secara async dan melakukan update pada UI sebenarnya itu tergantung pada ketersediaan data. Secara umum fakta di Flutter, ada sebuah widget yang membantu Anda untuk memudahkan manajemen future yaitu widget `FutureBuilder`.
+
+Anda dapat menggunakan FutureBuilder untuk manajemen future bersamaan dengan update UI ketika ada update Future. FutureBuilder memiliki status future sendiri, sehingga Anda dapat mengabaikan penggunaan `setState`, Flutter akan membangun ulang bagian UI ketika update itu dibutuhkan.
+
+Untuk lebih memahami widget FutureBuilder, mari kita coba dengan praktikum ini.
+
+Setelah Anda menyelesaikan praktikum 6, Anda dapat melanjutkan praktikum 7 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 6.
+
+### **Langkah 1: Modifikasi method getPosition()**
+Buka file `geolocation.dart` kemudian ganti isi method dengan kode ini.
+```dart
+Future<Position> getPosition() async {
+  await Geolocator.isLocationServiceEnabled();
+  await Future.delayed(const Duration(seconds: 3));
+  Position position = await Geolocator.getCurrentPosition();
+  return position; }
+```
+
+### **Langkah 2: Tambah variabel**
+Tambah variabel ini di class `_LocationScreenState`
+```dart
+Future<Position>? position;
+```
+
+### **Langkah 3: Tambah initState()**
+Tambah method ini dan set variabel `position`
+```dart
+@override
+void initState() {
+  super.initState();
+  position = getPosition();
+}
+```
+
+### **Langkah 4: Edit method build()**
+Ketik kode berikut dan sesuaikan. Kode lama bisa Anda comment atau hapus.
+```dart
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(title: Text('Current Location')),
+    body: Center(child: FutureBuilder(
+      future: position,
+      builder: (BuildContext context, AsyncSnapshot<Position>
+          snapshot) {
+        if (snapshot.connectionState ==
+            ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        else if (snapshot.connectionState ==
+            ConnectionState.done) {
+          return Text(snapshot.data.toString());
+        }
+        else {
+          return const Text('');
+        }
+      },
+    ),
+  ));
+}
+```
+
+![alt text](books/images/hasil_praktikum7_soal14.gif)
+
+>#### **Soal 13**
+>* Apakah ada perbedaan UI dengan praktikum sebelumnya? Mengapa demikian?
+>
+>**Jawab:**
+>
+>**Perbedaan UI: TIDAK ADA** (secara visual sama)
+>
+>**Yang Berubah:**
+>
+>| Aspek | Praktikum 6 | Praktikum 7 |
+>|-------|-------------|-------------|
+>| **Widget** | Manual dengan `setState()` | Otomatis dengan `FutureBuilder` |
+>| **State Management** | Manual | Otomatis |
+>| **Kode** | Lebih panjang | Lebih clean |
+>| **Rebuild UI** | Manual `setState()` | Otomatis oleh Flutter |
+>| **Rekomendasi** | ❌ Kurang efisien | ✅ **Lebih efisien** |
+>
+>**Penjelasan Singkat:**
+>
+>**Praktikum 6 (Manual setState):**
+>```dart
+>String myPosition = ''; // ← Variabel state manual
+>
+>void initState() {
+>  getPosition().then((Position myPos) {
+>    myPosition = 'Lat: ${myPos.latitude}...';
+>    setState(() {          // ← Harus panggil setState manual
+>      myPosition = myPosition;
+>    });
+>  });
+>}
+>
+>Widget build(BuildContext context) {
+>  final myWidget = myPosition == ''
+>      ? CircularProgressIndicator()
+>      : Text(myPosition);
+>  return Center(child: myWidget);
+>}
+>```
+>❌ Harus kelola state manual  
+>❌ Harus panggil `setState()`  
+>❌ Kode lebih panjang
+>
+>**Praktikum 7 (FutureBuilder):**
+>```dart
+>Future<Position>? position; // ← Future, bukan String
+>
+>void initState() {
+>  position = getPosition(); // ← Cukup assign Future
+>}
+>
+>Widget build(BuildContext context) {
+>  return FutureBuilder(
+>    future: position,
+>    builder: (context, snapshot) {
+>      if (snapshot.connectionState == ConnectionState.waiting) {
+>        return CircularProgressIndicator(); // ← Otomatis tampil saat loading
+>      } else if (snapshot.connectionState == ConnectionState.done) {
+>        return Text(snapshot.data.toString()); // ← Otomatis tampil saat selesai
+>      }
+>      return Text('');
+>    },
+>  );
+>}
+>```
+>✅ State dikelola otomatis oleh FutureBuilder  
+>✅ Tidak perlu `setState()`  
+>✅ Kode lebih clean dan reactive
+>
+>**Mengapa Praktikum 7 Lebih Baik:**
+>
+>1. **Tidak perlu setState()**: FutureBuilder otomatis rebuild UI saat Future selesai
+>2. **Lebih reactive**: UI langsung bereaksi terhadap perubahan Future
+>3. **Lebih clean**: Kode lebih mudah dibaca dan dipahami
+>4. **Handle semua state**: `waiting`, `done`, `error` di satu tempat
+>5. **Best practice Flutter**: Cara yang direkomendasikan untuk Future + UI
+>
+>**Kesimpulan:**
+>
+>a. UI terlihat **SAMA** (loading → koordinat GPS)
+>
+>b. **Cara kerja di balik layar BERBEDA**
+>
+>c. **FutureBuilder lebih efisien dan modern** ✅
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 13"**.
+>* Seperti yang Anda lihat, menggunakan FutureBuilder lebih efisien, clean, dan reactive dengan Future bersama UI.
