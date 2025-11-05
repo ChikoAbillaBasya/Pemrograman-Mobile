@@ -357,3 +357,97 @@ Akhirnya, **run** atau tekan **F5** jika aplikasi belum running. Maka Anda akan 
 >d.  Menghindari "callback hell" atau "pyramid of doom"
 > 
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 4**".
+
+## **Praktikum 3: Menggunakan Completer di Future**
+Menggunakan Future dengan `then`, `catchError`, `async`, dan `await` mungkin sudah cukup untuk banyak kasus, tetapi ada alternatif melakukan operasi async di Dart dan Flutter yaitu dengan `class Completer`.
+
+**Completer** membuat object Future yang mana Anda dapat menyelesaikannya nanti (late) dengan return sebuah value atau error.
+
+Setelah Anda menyelesaikan praktikum 2, Anda dapat melanjutkan praktikum 3 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 2.
+
+### **Langkah 1: Buka main.dart**
+Pastikan telah impor package async berikut.
+```dart
+import 'package:async/async.dart';
+```
+
+### **Langkah 2: Tambahkan variabel dan method**
+Tambahkan variabel late dan method di **class _FuturePageState** seperti ini.
+```dart
+late Completer completer;
+
+Future getNumber() {
+  completer = Completer<int>();
+  calculate();
+  return completer.future;
+}
+
+Future calculate() async {
+  await Future.delayed(const Duration(seconds : 5));
+  completer.complete(42);
+}
+```
+
+### **Langkah 3: Ganti isi kode onPressed()**
+Tambahkan kode berikut pada fungsi **onPressed()**. Kode sebelumnya bisa Anda comment.
+```dart
+getNumber().then((value) {
+                setState(() {
+                  result = value.toStrin();
+                });
+              });
+```
+### **Langkah 4:**
+Terakhir, **run** atau tekan **F5** untuk melihat hasilnya jika memang belum running. Bisa juga lakukan **hot restart** jika aplikasi sudah running. Maka hasilnya akan seperti gambar berikut ini. Setelah 5 detik, maka angka 42 akan tampil.
+
+![alt text](books/images/hasil_praktikum3_soal5.gif)
+
+>#### **Soal 5**
+>* Jelaskan maksud kode langkah 2 tersebut!
+>
+>**Jawab:**
+>
+>**Penjelasan Kode Langkah 2:**
+>
+>**1. Variabel `late Completer completer;`**
+>- `late` adalah modifier yang menandakan variabel akan diinisialisasi nanti (bukan saat deklarasi)
+>- `Completer` adalah class yang digunakan untuk membuat dan mengontrol Future secara manual
+>- Berbeda dengan Future biasa yang langsung dieksekusi, Completer memberi kontrol penuh kapan Future selesai
+>
+>**2. Method `getNumber()`**
+>```dart
+>Future getNumber() {
+>  completer = Completer<int>();     // ← Membuat instance Completer bertipe int
+>  calculate();                       // ← Memanggil fungsi calculate
+>  return completer.future;           // ← Mengembalikan Future dari Completer
+>}
+>```
+>- **`completer = Completer<int>()`**: Membuat objek Completer yang akan menghasilkan Future bertipe integer
+>- **`calculate()`**: Memanggil fungsi asynchronous yang akan menyelesaikan Completer
+>- **`return completer.future`**: Mengembalikan Future yang terkait dengan Completer ini, Future ini akan selesai ketika `completer.complete()` dipanggil
+>
+>**3. Method `calculate()`**
+>```dart
+>Future calculate() async {
+>  await Future.delayed(const Duration(seconds: 5));  // ← Delay 5 detik
+>  completer.complete(42);                            // ← Selesaikan dengan nilai 42
+>}
+>```
+>- **`await Future.delayed(const Duration(seconds: 5))`**: Menunggu selama 5 detik (simulasi operasi yang memakan waktu)
+>- **`completer.complete(42)`**: Menyelesaikan Future dengan nilai 42
+>  - Setelah baris ini dijalankan, semua listener `.then()` yang menunggu Future ini akan dieksekusi
+>  - Nilai 42 akan dikirim ke callback `.then()`
+>
+>**Keuntungan Menggunakan Completer:**
+>
+>a. **Kontrol manual**: Kita bisa menentukan kapan Future selesai
+>
+>b. **Fleksibilitas**: Bisa complete dari berbagai tempat dalam kode
+>
+>c. **Pemisahan concern**: Logika pembuatan Future terpisah dari logika completion
+>
+>d.  **Use case**: Berguna untuk membungkus callback-based API menjadi Future-based
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 5**".
