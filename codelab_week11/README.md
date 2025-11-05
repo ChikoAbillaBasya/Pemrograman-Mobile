@@ -615,3 +615,221 @@ Anda akan melihat hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan
 
 >#### **Soal 7**
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 7**".
+
+### **Langkah 4: Ganti variabel futureGroup**
+Anda dapat menggunakan FutureGroup dengan `Future.wait` seperti kode berikut.
+```dart
+final futures = Future.wait<int>([
+  returnOneAsync(),
+  returnTwoAsync(),
+  returnThreeAsync(),
+]);
+```
+
+>#### **Soal 8**
+>* Jelaskan maksud perbedaan kode langkah 1 dan 4!
+>
+>**Jawab:**
+>
+>**Perbedaan Kode Langkah 1 dan Langkah 4:**
+>
+>**Langkah 1 (Menggunakan FutureGroup):**
+>```dart
+>void returnFG() {
+>  // 1. Membuat instance FutureGroup
+>  FutureGroup<int> futuresGroup = FutureGroup<int>();
+>  
+>  // 2. Menambahkan Future satu per satu
+>  futuresGroup.add(returnOneAsync());
+>  futuresGroup.add(returnTwoAsync());
+>  futuresGroup.add(returnThreeAsync());
+>  
+>  // 3. Menutup group (tidak bisa tambah Future lagi)
+>  futuresGroup.close();
+>  
+>  // 4. Menunggu semua Future selesai
+>  futuresGroup.future.then((List<int> value) {
+>    int total = 0;
+>    for (var element in value) {
+>      total += element;
+>    }
+>    setState(() {
+>      result = total.toString();
+>    });
+>  });
+>}
+>```
+>
+>**Langkah 4 (Menggunakan Future.wait):**
+>```dart
+>void returnFG() {
+>  // Langsung membuat dan menjalankan Future secara paralel
+>  final futures = Future.wait<int>([
+>    returnOneAsync(),
+>    returnTwoAsync(),
+>    returnThreeAsync(),
+>  ]);
+>  
+>  futures.then((List<int> value) {
+>    int total = 0;
+>    for (var element in value) {
+>      total += element;
+>    }
+>    setState(() {
+>      result = total.toString();
+>    });
+>  });
+>}
+>```
+>
+>**Tabel Perbandingan:**
+>
+>| Aspek | FutureGroup (Langkah 1) | Future.wait (Langkah 4) |
+>|-------|-------------------------|-------------------------|
+>| **Sintaks** | Verbose (lebih panjang) | Concise (lebih ringkas) |
+>| **Cara Menambah Future** | `.add()` satu per satu | Langsung dalam List `[]` |
+>| **Perlu Close** | ✅ Ya, harus `.close()` | ❌ Tidak perlu |
+>| **Fleksibilitas** | ✅ Bisa tambah Future dinamis | ❌ Harus tahu semua Future di awal |
+>| **Readability** | ❌ Kurang readable | ✅ Lebih mudah dibaca |
+>| **Use Case** | Dynamic list of futures | Fixed list of futures |
+>| **Performance** | Sama | Sama |
+>| **Rekomendasi** | Untuk kasus dinamis | **Untuk kasus umum (recommended)** |
+>
+>**Penjelasan Detail:**
+>
+>**1. FutureGroup (Langkah 1) - Approach Manual:**
+>
+>**Kelebihan:**
+>- ✅ **Fleksibel**: Bisa menambahkan Future secara dinamis (contoh: dari loop atau kondisi)
+>- ✅ **Kontrol penuh**: Kita kontrol kapan menambah dan kapan menutup
+>
+>**Kekurangan:**
+>- ❌ **Verbose**: Butuh lebih banyak baris code
+>- ❌ **Harus close**: Wajib panggil `.close()` sebelum `.future`
+>- ❌ **Kurang intuitive**: Lebih kompleks untuk dibaca
+>
+>**Contoh use case FutureGroup:**
+>```dart
+>void processFiles(List<String> filePaths) {
+>  FutureGroup<File> futuresGroup = FutureGroup<File>();
+>  
+>  // Dinamis: jumlah Future tergantung panjang list
+>  for (var path in filePaths) {
+>    futuresGroup.add(readFile(path));
+>  }
+>  
+>  futuresGroup.close();
+>  futuresGroup.future.then((files) {
+>    // Process all files
+>  });
+>}
+>```
+>
+>**2. Future.wait (Langkah 4) - Modern Approach:**
+>
+>**Kelebihan:**
+>- ✅ **Concise**: Code lebih ringkas dan clean
+>- ✅ **Readable**: Lebih mudah dibaca dan dipahami
+>- ✅ **No close needed**: Tidak perlu memanggil `.close()`
+>- ✅ **Standard Dart**: Bagian dari Dart core library
+>- ✅ **Modern practice**: Lebih direkomendasikan oleh Flutter community
+>
+>**Kekurangan:**
+>- ❌ **Fixed list**: Harus tahu semua Future di awal (tidak dinamis)
+>
+>**Contoh use case Future.wait:**
+>```dart
+>// Fetch data dari multiple API sekaligus
+>void fetchAllData() {
+>  final futures = Future.wait([
+>    fetchUserData(),
+>    fetchPosts(),
+>    fetchComments(),
+>  ]);
+>  
+>  futures.then((results) {
+>    var userData = results[0];
+>    var posts = results[1];
+>    var comments = results[2];
+>    // Process data
+>  });
+>}
+>```
+>
+>**Kesimpulan dan Rekomendasi:**
+>
+>**Kapan menggunakan FutureGroup (Langkah 1):**
+>- ✅ Ketika jumlah Future tidak diketahui di awal
+>- ✅ Ketika Future ditambahkan secara dinamis (loop, kondisi)
+>- ✅ Ketika butuh kontrol manual kapan mulai menunggu
+>
+>**Kapan menggunakan Future.wait (Langkah 4):**
+>- ✅ **Ketika jumlah Future sudah fix/diketahui** (RECOMMENDED)
+>- ✅ Ketika ingin code lebih clean dan readable
+>- ✅ Untuk kasus-kasus umum paralel execution
+>- ✅ Lebih modern dan idiomatic Dart/Flutter
+>
+>**Best Practice:**
+>```dart
+>// ❌ Tidak disarankan untuk kasus sederhana
+>FutureGroup<int> fg = FutureGroup<int>();
+>fg.add(future1());
+>fg.add(future2());
+>fg.close();
+>
+>// ✅ Lebih disarankan
+>final results = await Future.wait([
+>  future1(),
+>  future2(),
+>]);
+>```
+>
+>**Perbedaan Waktu Eksekusi:**
+>- **Praktikum 2 (Sequential)**: 9 detik (3+3+3)
+>- **Praktikum 4 (Parallel dengan FutureGroup)**: 3 detik
+>- **Praktikum 4 (Parallel dengan Future.wait)**: 3 detik
+>
+>**Keduanya sama-sama efektif untuk paralel execution, tapi `Future.wait` lebih direkomendasikan karena lebih simple dan modern!**
+
+## **Praktikum 5: Menangani Respon Error pada Async Code**
+Ada beberapa teknik untuk melakukan handle error pada code async. Pada praktikum ini Anda akan menggunakan 2 cara, yaitu `then()` callback dan pola `async/await`.
+
+Setelah Anda menyelesaikan praktikum 4, Anda dapat melanjutkan praktikum 5 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 4.
+
+### **Langkah 1: Buka file main.dart**
+Tambahkan method ini ke dalam `class _FuturePageState`
+```dart
+Future returnError() async {
+  await Future.delayed(const Duration(seconds: 2));
+  throw Exception('Something terrible happened!');
+}
+```
+
+### **Langkah 2: ElevatedButton**
+Ganti dengan kode berikut
+```dart
+returnError()
+  .then((value){
+    setState(() {
+      result = 'Success';
+    });
+  }).catchError((onError){
+    setState(() {
+      result = onError.toString();
+    });
+  }).whenComplete(() => print('Complete'));
+```
+
+### **Langkah 3: Run**
+Lakukan run dan klik tombol **GO!** maka akan menghasilkan seperti gambar berikut.
+
+![alt text](books/images/hasil_praktikum5_soal9.gif)
+
+Pada bagian debug console akan melihat teks `Complete` seperti berikut.
+
+![alt text](books/images/complete.png)
+
+>#### **Soal 9**
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 9**".
