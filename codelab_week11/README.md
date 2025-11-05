@@ -451,3 +451,113 @@ Terakhir, **run** atau tekan **F5** untuk melihat hasilnya jika memang belum run
 >d.  **Use case**: Berguna untuk membungkus callback-based API menjadi Future-based
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 5**".
+
+**Langkah 5: Ganti method calculate()**
+Gantilah isi code method `calculate()` seperti kode berikut, atau Anda dapat membuat `calculate2()`
+```dart
+calculate() async {
+  try {
+    await new Future.delayed(const Duration(seconds : 5));
+    completer.complete(42);
+    // throw Exception();
+  }
+  catch (_) {
+    completer.completeError({});
+  }
+}
+```
+
+**Langkah 6: Pindah ke onPressed()**
+Ganti menjadi kode seperti berikut.
+```dart
+getNumber().then((value) {
+  setState(() {
+    result = value.toString();
+  });
+}).catchError((e) {
+  result = 'An error occurred';
+});
+```
+
+![alt text](books/images/hasil_praktikum3_soal6.gif)
+
+>#### **Soal 6**
+>* Jelaskan maksud perbedaan kode langkah 2 dengan langkah 5-6 tersebut!
+>
+>**Jawab:**
+>
+>**Perbedaan Kode Langkah 2 dengan Langkah 5-6:**
+>
+>**Langkah 2 (Tanpa Error Handling):**
+>```dart
+>// Method calculate - TANPA error handling
+>Future calculate() async {
+>  await Future.delayed(const Duration(seconds: 5));
+>  completer.complete(42);
+>}
+>
+>// onPressed - TANPA catchError
+>getNumber().then((value) {
+>  setState(() {
+>    result = value.toString();
+>  });
+>});
+>```
+>
+>**Langkah 5-6 (Dengan Error Handling):**
+>```dart
+>// Method calculate - DENGAN error handling
+>Future calculate() async {
+>  try {
+>    await Future.delayed(const Duration(seconds: 5));
+>    completer.complete(42);
+>  } catch (e) {
+>    completer.completeError({});  // ← Menangani error
+>  }
+>}
+>
+>// onPressed - DENGAN catchError
+>getNumber().then((value) {
+>  setState(() {
+>    result = value.toString();
+>  });
+>}).catchError((e) {              // ← Menangkap error
+>  result = 'An error occurred';
+>});
+>```
+>
+>**Perbedaan Utama:**
+>
+>**1. Error Handling di Method `calculate()`:**
+>
+>| Aspek | Langkah 2 | Langkah 5 |
+>|-------|-----------|-----------|
+>| Try-Catch | ❌ Tidak ada | ✅ Ada `try-catch` block |
+>| Error Completion | ❌ Tidak ada | ✅ `completer.completeError({})` |
+>| Handling Error | ❌ Error akan crash app | ✅ Error ditangkap dan dikirim ke Future |
+>
+>- **Langkah 2**: Jika terjadi error di `calculate()`, error tidak ditangani dan bisa menyebabkan crash
+>- **Langkah 5**: Error ditangkap oleh `try-catch` dan Completer diselesaikan dengan error menggunakan `completer.completeError({})`
+>
+>**2. Error Handling di onPressed():**
+>
+>| Aspek | Langkah 2 | Langkah 6 |
+>|-------|-----------|-----------|
+>| CatchError | ❌ Tidak ada | ✅ Ada `.catchError()` |
+>| User Feedback | ❌ Tidak ada pesan error | ✅ Menampilkan 'An error occurred' |
+>| User Experience | ❌ Buruk (tidak jelas apa yang terjadi) | ✅ Baik (user tahu ada error) |
+>
+>- **Langkah 2**: Tidak ada penanganan error di UI, jika Future gagal, user tidak tahu apa yang terjadi
+>- **Langkah 6**: Menggunakan `.catchError()` untuk menangkap error dan menampilkan pesan error ke user
+>
+>**Kesimpulan:**
+>
+>a. **Langkah 2**: Kode sederhana tanpa error handling (cocok untuk pembelajaran dasar)
+>
+>b. **Langkah 5-6**: Kode production-ready dengan error handling yang proper
+>
+>c. **Best Practice**: Selalu gunakan error handling seperti di langkah 5-6 untuk aplikasi nyata
+>
+>d. **Manfaat**: Aplikasi lebih stabil, user experience lebih baik, debugging lebih mudah
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 6**"
