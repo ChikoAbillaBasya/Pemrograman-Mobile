@@ -561,3 +561,57 @@ getNumber().then((value) {
 >d. **Manfaat**: Aplikasi lebih stabil, user experience lebih baik, debugging lebih mudah
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 6**"
+
+## **Praktikum 4: Memanggil Future secara paralel**
+Ketika Anda membutuhkan untuk menjalankan banyak Future secara bersamaan, ada sebuah class yang dapat Anda gunakan yaitu: `FutureGroup`.
+
+`FutureGroup` tersedia di package `async`, yang mana itu harus diimpor ke file dart Anda, seperti berikut.
+```dart
+import 'package:async/async.dart';
+```
+>**Catatan**: Package `dart:async` dan `async/async.dart` merupakan library yang berbeda. Pada beberapa kasus, Anda membutuhkan kedua lib tersebut untuk me-*run code async*.
+
+**FutureGroup** adalah sekumpulan dari Future yang dapat run secara paralel. Ketika run secara paralel, maka konsumsi waktu menjadi lebih hemat (cepat) dibanding run method async secara single setelah itu method async lainnya.
+
+Ketika semua code async paralel selesai dieksekusi, maka FutureGroup akan return value sebagai sebuah `List`, sama juga ketika ingin menambahkan operasi paralel dalam bentuk `List`.
+
+Setelah Anda menyelesaikan praktikum 3, Anda dapat melanjutkan praktikum 4 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 3.
+
+### **Langkah 1: Buka file main.dart**
+Tambahkan method ini ke dalam `class _FuturePageState`
+```dart
+void returnFG() {
+  FutureGroup<int> futuresGroup = FutureGroup<int>();
+  futuresGroup.add(returnOneAsync());
+  futuresGroup.add(returnTwoAsync());
+  futuresGroup.add(returnThreeAsync());
+  futuresGroup.close();
+  futuresGroup.future.then((List<int> value) {
+    int total = 0;
+    for (var element in value) {
+      total += element;
+    }
+    setState(() {
+      result = total.toString();
+    });
+  });
+}
+```
+
+### **Langkah 2: Edit onPressed()**
+Anda bisa hapus atau comment kode sebelumnya, kemudian panggil method dari langkah 1 tersebut.
+```dart
+onPressed: () {
+    returnFG();
+}
+```
+
+### **Langkah 3: Run**
+Anda akan melihat hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan praktikum sebelumnya menunggu sampai 9 detik.
+
+![alt text](books/images/hasil_praktikum4_soal7.gif)
+
+>#### **Soal 7**
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 7**".
