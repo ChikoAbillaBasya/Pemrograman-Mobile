@@ -175,44 +175,24 @@ Lakukan run aplikasi Flutter Anda. Anda akan melihat tampilan akhir seperti gamb
 >
 >**Jawab:**
 >
->**Penjelasan `substring(0, 450)`:**
->- Method `substring(0, 450)` digunakan untuk **memotong string** dari response body API
->- Angka `0` adalah **index awal** (karakter pertama)
->- Angka `450` adalah **index akhir** (karakter ke-450)
->- Fungsinya untuk **membatasi panjang text** yang ditampilkan karena response JSON dari Google Books API sangat panjang (bisa ribuan karakter)
->- Jika tidak dibatasi, text akan memenuhi layar dan membuat UI tidak rapi
->- Dengan membatasi 450 karakter, kita hanya menampilkan sebagian data untuk preview
+>* **Penjelasan `substring(0, 450)`:**
+>   - Method `substring(0, 450)` digunakan untuk **memotong string** dari response body API
+>   - Angka `0` adalah **index awal** (karakter pertama)
+>   - Angka `450` adalah **index akhir** (karakter ke-450)
+>   - Fungsinya untuk **membatasi panjang text** yang ditampilkan karena response JSON dari Google Books API sangat panjang (bisa ribuan karakter)
+>   - Jika tidak dibatasi, text akan memenuhi layar dan membuat UI tidak rapi
+>   - Dengan membatasi 450 karakter, kita hanya menampilkan sebagian data untuk preview
 >
->**Penjelasan `catchError`:**
->- `catchError()` adalah method untuk **menangani error** (error handling) pada operasi asynchronous
->- Jika terjadi error saat proses `getData()` (misal: tidak ada koneksi internet, timeout, API error, dll), maka blok `catchError` akan dieksekusi
->- Parameter `(_)` menggunakan underscore karena kita tidak menggunakan object error-nya
->- Di dalam catchError, kita set `result = 'An error occurred'` untuk memberi tahu user bahwa terjadi kesalahan
->- `setState()` dipanggil untuk memperbarui UI dan menampilkan pesan error
->
->**Alur kerja kode:**
->1. User menekan tombol "GO!"
->2. `setState()` pertama dipanggil untuk trigger rebuild (opsional)
->3. `getData()` dipanggil secara asynchronous (mengambil data dari API)
->4. **Jika berhasil**: 
->    - `.then()` dijalankan
->    - Response body diambil 450 karakter pertama
->    - Disimpan ke variabel `result`
->    - `setState()` dipanggil untuk update UI
->5. **Jika gagal**:
->    - `.catchError()` dijalankan
->    - `result` diisi dengan pesan error
->    - `setState()` dipanggil untuk update UI
+>* **Penjelasan `catchError`:**
+>    - `catchError()` adalah method untuk **menangani error** (error handling) pada operasi asynchronous
+>   - Jika terjadi error saat proses `getData()` (misal: tidak ada koneksi internet, timeout, API error, dll), maka blok `catchError` akan dieksekusi
+>   - Parameter `(_)` menggunakan underscore karena kita tidak menggunakan object error-nya
+>   - Di dalam catchError, kita set `result = 'An error occurred'` untuk memberi tahu user bahwa terjadi kesalahan
+>   - `setState()` dipanggil untuk memperbarui UI dan menampilkan pesan error
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 3**".
 
 ![alt text](books/images/hasil_praktikum1_soal3.gif)
-
-**Penjelasan hasil:**
-- Saat aplikasi pertama kali dibuka, menampilkan tombol "GO!" dan CircularProgressIndicator
-- Ketika tombol "GO!" ditekan, aplikasi melakukan request ke Google Books API
-- Setelah data berhasil diambil, ditampilkan 450 karakter pertama dari response JSON
-- CircularProgressIndicator tetap berputar menunjukkan aplikasi tetap responsif
 
 ## **Praktikum 2: Menggunakan await/async untuk menghindari callbacks**
 Ada alternatif penggunaan Future yang lebih clean, mudah dibaca dan dirawat, yaitu pola **async/await**. Intinya pada dua kata kunci ini:
@@ -278,22 +258,10 @@ ElevatedButton(
 }
 ```
 
->**Penjelasan hasil:**
->- Saat tombol "GO!" ditekan, aplikasi mulai menghitung
->- Terjadi delay 9 detik (3 detik × 3 operasi async)
->- Setelah 9 detik, muncul angka "6" sebagai hasil penjumlahan 1 + 2 + 3
->- CircularProgressIndicator tetap berputar menunjukkan UI tetap responsif selama proses async
-
 ### **Langkah 4: Run**
 Akhirnya, **run** atau tekan **F5** jika aplikasi belum running. Maka Anda akan melihat seperti gambar berikut, hasil angka 6 akan tampil setelah delay 9 detik.
 
 ![alt text](books/images/hasil_praktikum2_soal4.gif)
-
-**Penjelasan hasil:**
-- Saat tombol "GO!" ditekan, aplikasi mulai menghitung 
-- Terjadi delay 9 detik (3 detik × 3 operasi async)
-- Setelah 9 detik, muncul angka "6" sebagai hasil penjumlahan 1 + 2 + 3
-- CircularProgressIndicator tetap berputar menunjukkan UI tetap responsif selama proses async
 
 >#### **Soal 4**
 >* Jelaskan maksud kode langkah 1 dan 2 tersebut!
@@ -833,3 +801,384 @@ Pada bagian debug console akan melihat teks `Complete` seperti berikut.
 
 >#### **Soal 9**
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 9**".
+
+### **Langkah 4: Tambah method handleError()**
+Tambahkan kode ini di dalam `class _FutureStatePage`
+```dart
+Future handleError() async {
+  try {
+    await returnError();
+  } 
+  catch (error) {
+    setState(() {
+      result = error.toString();
+    });
+  } 
+  finally {
+    print('Complete');
+  }
+}
+```
+
+>#### **Soal 10**
+>* Panggil method `handleError()` tersebut di `ElevatedButton`, lalu run. Apa hasilnya? Jelaskan perbedaan kode langkah 1 dan 4!
+>
+>**Jawaban:**
+>
+>**Hasil Running:**
+>
+>Setelah menjalankan aplikasi dan menekan tombol "GO!":
+>- Setelah 2 detik, muncul text error: **"Exception: Something terrible happened!"**
+>- Di debug console muncul text **"Complete"**
+>- Aplikasi tetap berjalan normal (tidak crash)
+>
+>![alt text](books/images/hasil_praktikum5_soal10.gif)
+>
+>**Perbedaan Kode Langkah 2 dan Langkah 4:**
+>
+>**Langkah 2 (Menggunakan then-catchError-whenComplete):**
+>```dart
+>returnError()
+>  .then((value) {
+>    setState(() {
+>      result = 'Success';
+>    });
+>  }).catchError((onError) {
+>    setState(() {
+>      result = onError.toString();
+>    });
+>  }).whenComplete(() => print('Complete'));
+>```
+>
+>**Langkah 4 (Menggunakan try-catch-finally dengan async/await):**
+>```dart
+>Future handleError() async {
+>  try {
+>    await returnError();
+>  } 
+>  catch (error) {
+>    setState(() {
+>      result = error.toString();
+>    });
+>  } 
+>  finally {
+>    print('Complete');
+>  }
+>}
+>```
+>
+>**Tabel Perbandingan:**
+>
+>| Aspek | Langkah 2 (then-catchError) | Langkah 4 (try-catch) |
+>|-------|----------------------------|----------------------|
+>| **Pola** | Callback-based | async/await |
+>| **Sintaks** | Chaining methods | Sequential code |
+>| **Readability** | ❌ Kurang readable (callback chain) | ✅ Lebih mudah dibaca |
+>| **Success Handling** | `.then()` | Kode setelah `await` |
+>| **Error Handling** | `.catchError()` | `catch (error)` |
+>| **Cleanup/Finally** | `.whenComplete()` | `finally` block |
+>| **Nesting** | Bisa jadi callback hell | ✅ Flat structure |
+>| **Debugging** | ❌ Lebih sulit | ✅ Lebih mudah |
+>| **Modern Practice** | ❌ Old style | ✅ Recommended |
+>
+>**Penjelasan Detail:**
+>
+>**1. Langkah 2 - then/catchError/whenComplete Pattern:**
+>
+>```dart
+>returnError()                          // 1. Panggil Future
+>  .then((value) {                      // 2. Jika SUCCESS (tidak dijalankan karena error)
+>    setState(() {
+>      result = 'Success';
+>    });
+>  })
+>  .catchError((onError) {              // 3. Jika ERROR (dijalankan)
+>    setState(() {
+>      result = onError.toString();     // Tampilkan error message
+>    });
+>  })
+>  .whenComplete(() => print('Complete')); // 4. Selalu dijalankan (success/error)
+>```
+>
+>**Karakteristik:**
+>- ✅ Tidak perlu keyword `async`/`await`
+>- ✅ Bisa digunakan untuk single Future
+>- ❌ Kurang readable untuk multiple async operations
+>- ❌ Bisa jadi "callback hell" jika banyak chaining
+>- ❌ Error stack trace kurang jelas
+>
+>**2. Langkah 4 - try/catch/finally Pattern:**
+>
+>```dart
+>Future handleError() async {           // 1. Method harus async
+>  try {                                 // 2. Try block
+>    await returnError();                // 3. Tunggu Future selesai
+>    // Jika success, kode di sini dijalankan (tidak tercapai karena error)
+>  } 
+>  catch (error) {                       // 4. Catch block - tangkap error
+>    setState(() {
+>      result = error.toString();        // Tampilkan error message
+>    });
+>  } 
+>  finally {                             // 5. Finally block - selalu dijalankan
+>    print('Complete');
+>  }
+>}
+>```
+>
+>**Karakteristik:**
+>- ✅ Sintaks familiar (seperti synchronous code)
+>- ✅ Lebih mudah dibaca dan dipahami
+>- ✅ Error handling lebih comprehensive
+>- ✅ Stack trace lebih jelas untuk debugging
+>- ✅ Cocok untuk multiple async operations
+>- ❌ Harus menggunakan keyword `async`/`await`
+>
+>**Kesamaan:**
+>- ✅ Keduanya menangkap error dengan baik
+>- ✅ Keduanya menampilkan error message yang sama
+>- ✅ Keduanya menjalankan cleanup code (whenComplete/finally)
+>- ✅ Keduanya tidak menyebabkan app crash
+>- ✅ Hasil output sama: menampilkan "Exception: Something terrible happened!"
+>
+>**Perbedaan Utama:**
+>
+>**1. Struktur Kode:**
+>```dart
+>// Langkah 2: Horizontal (chaining)
+>returnError().then().catchError().whenComplete();
+>
+>// Langkah 4: Vertical (sequential)
+>try {
+>  await returnError();
+>} catch (error) {
+>  // handle
+>} finally {
+>  // cleanup
+>}
+>```
+>
+>**2. Error Information:**
+>```dart
+>// Langkah 2: Parameter onError tidak di-type
+>.catchError((onError) { ... })
+>
+>// Langkah 4: Bisa specific error type
+>catch (Exception error) { ... }  // Hanya tangkap Exception
+>catch (e) { ... }                // Tangkap semua error
+>```
+>
+>**3. Multiple Async Operations:**
+>```dart
+>// Langkah 2: Nested callbacks (callback hell)
+>future1()
+>  .then((v1) => future2())
+>  .then((v2) => future3())
+>  .catchError((e) => ...);
+>
+>// Langkah 4: Sequential & clean
+>try {
+>  var v1 = await future1();
+>  var v2 = await future2();
+>  var v3 = await future3();
+>} catch (e) {
+>  // handle
+>}
+>```
+>
+>**Kapan Menggunakan Masing-masing:**
+>
+>**Gunakan then-catchError (Langkah 2) ketika:**
+>- ✅ Hanya satu Future operation
+>- ✅ Tidak ingin membuat method async
+>- ✅ Code sudah menggunakan pattern ini (consistency)
+>
+>**Gunakan try-catch (Langkah 4) ketika:**
+>- ✅ **Multiple async operations** (RECOMMENDED)
+>- ✅ Butuh readability tinggi
+>- ✅ **Error handling yang kompleks**
+>- ✅ Ingin specific error types
+>- ✅ **Modern Flutter development** (BEST PRACTICE)
+>
+>**Best Practice Recommendation:**
+>
+>```dart
+>// ❌ Hindari callback hell
+>getData()
+>  .then((data) => processData(data))
+>  .then((result) => saveResult(result))
+>  .catchError((e) => print(e));
+>
+>// ✅ Gunakan async/await
+>Future<void> handleData() async {
+>  try {
+>    final data = await getData();
+>    final result = await processData(data);
+>    await saveResult(result);
+>  } catch (e) {
+>    print(e);
+>  } finally {
+>    // cleanup
+>  }
+>}
+>```
+>
+>**Kesimpulan:**
+>
+>| Kriteria | then-catchError | try-catch |
+>|----------|----------------|-----------|
+>| **Hasil Output** | ✅ Sama | ✅ Sama |
+>| **Error Handling** | ✅ Baik | ✅ Lebih Baik |
+>| **Readability** | ⚠️ Cukup | ✅ Sangat Baik |
+>| **Maintainability** | ⚠️ Cukup | ✅ Sangat Baik |
+>| **Debugging** | ⚠️ Sulit | ✅ Mudah |
+>| **Modern Practice** | ❌ Old | ✅ Recommended |
+>
+>**Rekomendasi:** Untuk development modern, **gunakan pattern try-catch-finally (Langkah 4)** karena lebih readable, maintainable, dan sesuai dengan best practice Flutter/Dart! ✅
+
+## **Praktikum 6: Menggunakan Future dengan StatefulWidget**
+Seperti yang Anda telah pelajari, `Stateless` widget tidak dapat menyimpan informasi (state), `StatefulWidget` dapat mengelola variabel dan properti dengan method `setState()`, yang kemudian dapat ditampilkan pada UI. `State` adalah informasi yang dapat berubah selama life cycle widget itu berlangsung.
+
+Ada **4 method** utama dalam life cycle `StatefullWidget`:
+
+* `initState()`: dipanggil sekali ketika state dibangun. Bisa dikatakan ini juga sebagai konstruktor class.
+* `build()`: dipanggil setiap kali ada perubahan state atau UI. Method ini melakukan destroy UI dan membangun ulang dari nol.
+* `deactive()` dan `dispose()`: digunakan untuk menghapus widget dari tree, pada beberapa kasus dimanfaatkan untuk menutup koneksi ke database atau menyimpan data sebelum berpindah screen.
+
+Setelah Anda menyelesaikan praktikum 5, Anda dapat melanjutkan praktikum 6 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 5.
+
+### **Langkah 1: install plugin geolocator**
+Tambahkan plugin geolocator dengan mengetik perintah berikut di terminal.
+```dart
+flutter pub add geolocator
+```
+
+![alt text](books/images/geolocator.png)
+
+### **Langkah 2: Tambah permission GPS**
+Jika Anda menargetkan untuk platform **Android**, maka tambahkan baris kode berikut di file `android/app/src/main/androidmanifest.xml`
+```dart
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+```
+
+Jika Anda menargetkan untuk platform **iOS**, maka tambahkan kode ini ke file `Info.plist`
+
+```dart
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>This app needs to access your location</string>
+```
+
+### **Langkah 3: Buat file geolocation.dart**
+Tambahkan file baru ini di folder lib project Anda.
+
+![alt text](books/images/new_geolocation.png)
+
+### **Langkah 4: Buat StatefulWidget**
+Buat `class LocationScreen` di dalam file `geolocation.dart`
+
+### **Langkah 5: Isi kode geolocation.dart**
+```dart
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({super.key});
+
+  @override
+  State<LocationScreen> createState() => _LocationScreenState();
+}
+
+class _LocationScreenState extends State<LocationScreen> {
+  String myPosition = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getPosition().then((Position myPos) {
+      myPosition =
+          'Latitude: ${myPos.latitude.toString()} - Longitude: ${myPos.longitude.toString()}';
+      setState(() {
+        myPosition = myPosition;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Current Location - Chiko')),
+      body: Center(child: Text(myPosition)),
+    );
+  }
+
+  Future<Position> getPosition() async {
+    await Geolocator.requestPermission();
+    await Geolocator.isLocationServiceEnabled();
+    Position position =
+        await Geolocator.getCurrentPosition();
+    return position;
+  }
+}
+```
+>#### **Soal 11**
+>* Tambahkan **nama panggilan Anda** pada tiap properti `title` sebagai identitas pekerjaan Anda.
+
+### **Langkah 6: Edit main.dart**
+Panggil screen baru tersebut di file main Anda seperti berikut.
+```dart
+home: LocationScreen(),
+```
+
+### **Langkah 7: Run**
+Run project Anda di **device** atau **emulator** (**bukan browser**), maka akan tampil seperti berikut ini.
+
+![alt text](books/images/hasil_praktikum6_soal11.gif)
+
+### **Langkah 8: Tambahkan animasi loading**
+Tambahkan widget loading seperti kode berikut. Lalu hot restart, perhatikan perubahannya.
+```dart
+@override
+Widget build(BuildContext context) {
+  final myWidget = myPosition == ''
+      ? const CircularProgressIndicator()
+      : const Text(myPosition);;
+
+  return Scaffold(
+    appBar: AppBar(title: Text('Current Location')),
+    body: Center(child: myWidget),
+  );
+}
+```
+
+![alt text](books/images/hasil_praktikum6_soal12.gif)
+
+>#### **Soal 12**
+>* Jika Anda tidak melihat animasi loading tampil, kemungkinan itu berjalan sangat cepat. Tambahkan delay pada method `getPosition()` dengan kode `await Future.delayed(const Duration(seconds: 3));`
+>* Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
+>
+>**Jawab:**
+>
+>**TIDAK**, koordinat GPS **tidak akan muncul** ketika run di browser.
+>
+>**Alasan:**
+>
+>a. Plugin `geolocator` membutuhkan **native platform API** (Android/iOS)
+>
+>b. Browser **tidak memiliki akses** ke GPS hardware secara langsung seperti native app
+>
+>c. Meskipun browser punya **Geolocation API**, plugin geolocator Flutter tidak support web
+>
+>d.  Permission GPS (AndroidManifest.xml / Info.plist) hanya berlaku untuk **mobile platform**
+>
+>**Solusi:**
+>
+>a. Run di **Android emulator** atau **physical device**
+>
+>b. Run di **iOS simulator** atau **iPhone**
+>
+>c. Untuk web, gunakan package lain yang support web seperti `geolocator_web`
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 12**".
