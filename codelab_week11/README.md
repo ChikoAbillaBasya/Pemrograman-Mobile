@@ -314,16 +314,6 @@ Akhirnya, **run** atau tekan **F5** jika aplikasi belum running. Maka Anda akan 
 >
 >**Total waktu eksekusi: 9 detik** (3 detik × 3 fungsi, karena dijalankan secara berurutan)
 >
->**Keuntungan menggunakan async/await dibanding then():**
->
->a.  Kode lebih mudah dibaca (seperti kode synchronous biasa)
->
->b.  Lebih mudah di-maintain
->
->c.  Error handling lebih sederhana dengan try-catch
->
->d.  Menghindari "callback hell" atau "pyramid of doom"
-> 
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 4**".
 
 ## **Praktikum 3: Menggunakan Completer di Future**
@@ -407,16 +397,6 @@ Terakhir, **run** atau tekan **F5** untuk melihat hasilnya jika memang belum run
 >- **`completer.complete(42)`**: Menyelesaikan Future dengan nilai 42
 >  - Setelah baris ini dijalankan, semua listener `.then()` yang menunggu Future ini akan dieksekusi
 >  - Nilai 42 akan dikirim ke callback `.then()`
->
->**Keuntungan Menggunakan Completer:**
->
->a. **Kontrol manual**: Kita bisa menentukan kapan Future selesai
->
->b. **Fleksibilitas**: Bisa complete dari berbagai tempat dalam kode
->
->c. **Pemisahan concern**: Logika pembuatan Future terpisah dari logika completion
->
->d.  **Use case**: Berguna untuk membungkus callback-based API menjadi Future-based
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 5**".
 
@@ -900,13 +880,6 @@ Future handleError() async {
 >  .whenComplete(() => print('Complete')); // 4. Selalu dijalankan (success/error)
 >```
 >
->**Karakteristik:**
->- ✅ Tidak perlu keyword `async`/`await`
->- ✅ Bisa digunakan untuk single Future
->- ❌ Kurang readable untuk multiple async operations
->- ❌ Bisa jadi "callback hell" jika banyak chaining
->- ❌ Error stack trace kurang jelas
->
 >**2. Langkah 4 - try/catch/finally Pattern:**
 >
 >```dart
@@ -925,21 +898,6 @@ Future handleError() async {
 >  }
 >}
 >```
->
->**Karakteristik:**
->- ✅ Sintaks familiar (seperti synchronous code)
->- ✅ Lebih mudah dibaca dan dipahami
->- ✅ Error handling lebih comprehensive
->- ✅ Stack trace lebih jelas untuk debugging
->- ✅ Cocok untuk multiple async operations
->- ❌ Harus menggunakan keyword `async`/`await`
->
->**Kesamaan:**
->- ✅ Keduanya menangkap error dengan baik
->- ✅ Keduanya menampilkan error message yang sama
->- ✅ Keduanya menjalankan cleanup code (whenComplete/finally)
->- ✅ Keduanya tidak menyebabkan app crash
->- ✅ Hasil output sama: menampilkan "Exception: Something terrible happened!"
 >
 >**Perbedaan Utama:**
 >
@@ -986,20 +944,6 @@ Future handleError() async {
 >}
 >```
 >
->**Kapan Menggunakan Masing-masing:**
->
->**Gunakan then-catchError (Langkah 2) ketika:**
->- ✅ Hanya satu Future operation
->- ✅ Tidak ingin membuat method async
->- ✅ Code sudah menggunakan pattern ini (consistency)
->
->**Gunakan try-catch (Langkah 4) ketika:**
->- ✅ **Multiple async operations** (RECOMMENDED)
->- ✅ Butuh readability tinggi
->- ✅ **Error handling yang kompleks**
->- ✅ Ingin specific error types
->- ✅ **Modern Flutter development** (BEST PRACTICE)
->
 >**Best Practice Recommendation:**
 >
 >```dart
@@ -1022,17 +966,6 @@ Future handleError() async {
 >  }
 >}
 >```
->
->**Kesimpulan:**
->
->| Kriteria | then-catchError | try-catch |
->|----------|----------------|-----------|
->| **Hasil Output** | ✅ Sama | ✅ Sama |
->| **Error Handling** | ✅ Baik | ✅ Lebih Baik |
->| **Readability** | ⚠️ Cukup | ✅ Sangat Baik |
->| **Maintainability** | ⚠️ Cukup | ✅ Sangat Baik |
->| **Debugging** | ⚠️ Sulit | ✅ Mudah |
->| **Modern Practice** | ❌ Old | ✅ Recommended |
 >
 >**Rekomendasi:** Untuk development modern, **gunakan pattern try-catch-finally (Langkah 4)** karena lebih readable, maintainable, dan sesuai dengan best practice Flutter/Dart! ✅
 
@@ -1621,7 +1554,7 @@ Lakukan run, jika terjadi error silakan diperbaiki.
 >#### **Soal 16**
 >* Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
 >
->**Jawaban:**
+>**Jawab:**
 >
 >**Apa yang Terjadi:**
 >
@@ -1629,7 +1562,7 @@ Lakukan run, jika terjadi error silakan diperbaiki.
 >   - Aplikasi pindah ke screen kedua (NavigationSecond)
 >   - Background screen pertama tetap dengan warna sebelumnya
 >
->2. **Saat klik tombol warna** (Red/Green/Blue) di screen kedua:
+>2. **Saat klik tombol warna** (Yellow/Red/Orange) di screen kedua:
 >   - Screen kedua **tertutup** (pop/kembali)
 >   - Screen pertama **muncul kembali**
 >   - **Background berubah** sesuai warna yang dipilih
@@ -1720,3 +1653,204 @@ Lakukan run, jika terjadi error silakan diperbaiki.
 Hasilnya akan seperti gambar berikut ini.
 
 ![alt text](books/images/hasil_praktikum8_soal15.gif)
+
+## **Praktikum 9: Memanfaatkan async/await dengan Widget Dialog**
+Pada praktikum ini, Anda akan memanfaatkan widget `AlertDialog`. Anda bisa manfaatkan widget ini misal untuk memilih operasi Save, Delete, Accept, dan sebagainya.
+
+Setelah Anda menyelesaikan praktikum 8, Anda dapat melanjutkan praktikum 9 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 8.
+
+### **Langkah 1: Buat file baru navigation_dialog.dart**
+Buat file dart baru di folder lib project Anda.
+
+![alt text](books/images/new_dialog.png)
+
+### **Langkah 2: Isi kode navigation_dialog.dart**
+```dart
+import 'package:flutter/material.dart';
+
+class NavigationDialogScreen extends StatefulWidget {
+  const NavigationDialogScreen({super.key});
+
+  @override
+  State<NavigationDialogScreen> createState() =>
+      _NavigationDialogScreenState();
+}
+
+class _NavigationDialogScreenState extends
+    State<NavigationDialogScreen> {
+  Color color = Colors.blue.shade700;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: color,
+      appBar: AppBar(
+        title: const Text('Navigation Dialog Screen - Chiko'),
+      ),
+      body: Center(
+        child:
+          ElevatedButton(child: const Text('Change Color'),
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+}
+```
+
+### **Langkah 3: Tambah method async**
+```dart
+_showColorDialog(BuildContext context) async {
+
+  await showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (_) {
+      return AlertDialog(
+        title: const Text('Very important question'),
+        content: const Text('Please choose a color'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Yellow'),
+            onPressed: () {
+              color = Colors.yellow.shade700;
+              Navigator.pop(context, color);
+            },
+          ),
+          TextButton(
+            child: const Text('Red'),
+            onPressed: () {
+              color = Colors.red.shade700;
+              Navigator.pop(context, color);
+            },
+          ),
+          TextButton(
+            child: const Text('Orange'),
+            onPressed: () {
+              color = Colors.orange.shade700;
+              Navigator.pop(context, color);
+            },
+          ),
+        ],
+      );
+    },
+  );
+  setState(() {});
+}
+```
+
+### **Langkah 4: Panggil method di ElevatedButton**
+```dart
+onPressed: () {
+  _showColorDialog(context);
+},
+```
+
+### **Langkah 5: Edit main.dart**
+Ubah properti home
+```dart
+home: const NavigationDialog(),
+```
+
+### **Langkah 6: Run**
+Coba ganti warna background dengan widget dialog tersebut. Jika terjadi error, silakan diperbaiki. Jika berhasil, akan tampil seperti gambar berikut.
+
+![alt text](hasil_praktikum9_soal17.gif)
+
+>#### **Soal 17**
+>* Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
+>
+>**Jawab:**
+>
+>**Apa yang Terjadi:**
+>
+>1. **Saat klik tombol "Change Color"**:
+>   - Muncul **AlertDialog** di tengah layar
+>   - Background menjadi gelap (overlay)
+>   - Dialog menampilkan 3 tombol warna (Yellow, Red, Orange)
+>
+>2. **Saat klik tombol warna di dialog**:
+>   - Dialog **tertutup** otomatis
+>   - **Background berubah** sesuai warna yang dipilih
+>   - Screen kembali normal dengan warna baru
+>
+>**Mengapa Demikian:**
+>
+>**Flow Kerja Dialog dengan Async/Await:**
+>
+>```dart
+>_showColorDialog(BuildContext context) async {
+>  // 1. Tampilkan dialog dan TUNGGU user pilih warna
+>  await showDialog(
+>    barrierDismissible: false,  // User tidak bisa close dengan tap di luar
+>    context: context,
+>    builder: (_) {
+>      return AlertDialog(
+>        title: const Text('Very important question'),
+>        content: const Text('Please choose a color'),
+>        actions: <Widget>[
+>          TextButton(
+>            child: const Text('Yellow'),
+>            onPressed: () {
+>              color = Colors.yellow.shade700;
+>              Navigator.pop(context, color);  // 2. Close dialog & kirim warna
+>            },
+>          ),
+>          // ... tombol lainnya
+>        ],
+>      );
+>    },
+>  );
+>  // 3. Setelah dialog close, update UI
+>  setState(() {});
+>}
+>```
+>
+>**Penjelasan Detail:**
+>
+>**1. `showDialog()` dengan `await`:**
+>- `showDialog()` mengembalikan **Future**
+>- `await` membuat program **menunggu** hingga dialog ditutup
+>- Dialog bersifat modal (blocking) - user harus pilih warna
+>- `barrierDismissible: false` → user tidak bisa close dengan tap di luar dialog
+>
+>**2. `Navigator.pop(context, color)`:**
+>- `pop()` menutup dialog
+>- Parameter kedua (`color`) adalah **data yang dikembalikan** ke caller
+>- Warna ini akan diproses setelah `await showDialog()` selesai
+>
+>**3. `setState()` setelah dialog:**
+>- Dipanggil setelah `await showDialog()` selesai
+>- Flutter rebuild UI dengan `color` yang baru
+>- Background berubah sesuai pilihan user
+>
+>* Gantilah 3 warna pada langkah 3 dengan warna favorit Anda!
+>
+>```dart
+>actions: <Widget>[
+>  TextButton(
+>    child: const Text('Yellow'),
+>    onPressed: () {
+>      color = Colors.yellow.shade700; // ← Warna favorit 1
+>      Navigator.pop(context, color);
+>    },
+>  ),
+>  TextButton(
+>    child: const Text('Red'),
+>    onPressed: () {
+>      color = Colors.red.shade700; // ← Warna favorit 2
+>      Navigator.pop(context, color);
+>    },
+>  ),
+>  TextButton(
+>    child: const Text('Orange'),
+>    onPressed: () {
+>      color = Colors.orange.shade700; // ← Warna favorit 3
+>      Navigator.pop(context, color);
+>    },
+>  ),
+>],
+>```
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 17**".
