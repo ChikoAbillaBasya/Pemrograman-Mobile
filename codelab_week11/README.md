@@ -1493,3 +1493,230 @@ else if (snapshot.connectionState == ConnectionState.done) {
 >**Selalu tambahkan `snapshot.hasError` check untuk aplikasi yang robust!** ✅
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 14**".
+
+## **Praktikum 8: Navigation route dengan Future Function**
+Praktikum kali ini Anda akan melihat manfaat Future untuk Navigator dalam transformasi Route menjadi sebuah function async. Anda akan melakukan push screen baru dan fungsi await menunggu data untuk melakukan update warna background pada screen.
+
+Setelah Anda menyelesaikan praktikum 7, Anda dapat melanjutkan praktikum 8 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 7.
+
+### **Langkah 1: Buat file baru navigation_first.dart**
+Buatlah file baru ini di project lib Anda.
+
+![alt text](books/images/new_navigation.png)
+
+### **Langkah 2: Isi kode navigation_first.dart**
+```dart
+import 'package:flutter/material.dart';
+
+class NavigationFirst extends StatefulWidget {
+  const NavigationFirst({super.key});
+
+  @override
+  State<NavigationFirst> createState() => _NavigationFirstState();
+}
+
+class _NavigationFirstState extends State<NavigationFirst> {
+  Color color = Colors.blue.shade700;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: color,
+      appBar: AppBar(
+        title: const Text('Navigation First Screen - Chiko'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Change Color'),
+          onPressed: () {
+            _navigateAndGetColor(context);
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+>#### **Soal 15**
+>* Tambahkan **nama panggilan Anda** pada tiap properti `title` sebagai identitas pekerjaan Anda.
+>* Silakan ganti dengan warna tema favorit Anda.
+
+### **Langkah 3: Tambah method di class _NavigationFirstState**
+Tambahkan method ini.
+```dart
+Future _navigateAndGetColor(BuildContext context) async {
+   color = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const NavigationSecond()),) ?? Colors.blue;
+   setState(() {});
+   });
+}
+```
+
+### **Langkah 4: Buat file baru navigation_second.dart**
+Buat file baru ini di project lib Anda. Silakan jika ingin mengelompokkan view menjadi satu folder dan sesuaikan impor yang dibutuhkan.
+
+### **Langkah 5: Buat class NavigationSecond dengan StatefulWidget**
+```dart
+import 'package.flutter/material.dart';
+
+class NavigationSecond extends StatefulWidget {
+  const NavigationSecond({super.key});
+
+  @override
+  State<NavigationSecond> createState() => _NavigationSecondState();
+}
+
+class _NavigationSecondState extends State<NavigationSecond> {
+  @override
+  Widget build(BuildContext context) {
+    Color color;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Navigation Second Screen - Chiko'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              child: const Text('Yellow'),
+              onPressed: () {
+                color = Colors.yellow.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Red'),
+              onPressed: () {
+                color = Colors.red.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Orange'),
+              onPressed: () {
+                color = Colors.orange.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+### **Langkah 6: Edit main.dart**
+Lakukan edit properti home.
+```dart
+home: const NavigationFirst(),
+```
+
+### **Langkah 8: Run**
+Lakukan run, jika terjadi error silakan diperbaiki.
+
+>#### **Soal 16**
+>* Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
+>
+>**Jawaban:**
+>
+>**Apa yang Terjadi:**
+>
+>1. **Saat klik tombol "Change Color"** di screen pertama:
+>   - Aplikasi pindah ke screen kedua (NavigationSecond)
+>   - Background screen pertama tetap dengan warna sebelumnya
+>
+>2. **Saat klik tombol warna** (Red/Green/Blue) di screen kedua:
+>   - Screen kedua **tertutup** (pop/kembali)
+>   - Screen pertama **muncul kembali**
+>   - **Background berubah** sesuai warna yang dipilih
+>
+>**Mengapa Demikian:**
+>
+>**Flow Kerja Navigation dengan Future:**
+>
+>```dart
+>// Di NavigationFirst
+>Future _navigateAndGetColor(BuildContext context) async {
+>  // 1. PUSH ke screen kedua & TUNGGU hasilnya
+>  color = await Navigator.push(
+>    context,
+>    MaterialPageRoute(builder: (context) => const NavigationSecond()),
+>  ) ?? Colors.blue;  // 3. Terima warna (atau default blue jika null)
+>  
+>  // 4. Update UI dengan warna baru
+>  setState(() {});
+>}
+>```
+>
+>```dart
+>// Di NavigationSecond
+>ElevatedButton(
+>  child: const Text('Red'),
+>  onPressed: () {
+>    color = Colors.red.shade700;
+>    Navigator.pop(context, color);  // 2. POP & kirim warna ke screen pertama
+>  },
+>),
+>```
+>
+>**Penjelasan Detail:**
+>
+>**1. `Navigator.push()` dengan `await`:**
+>- `Navigator.push()` mengembalikan **Future**
+>- `await` membuat program **menunggu** hingga user kembali dari screen kedua
+>- Future selesai ketika `Navigator.pop()` dipanggil di screen kedua
+>- Data yang di-`pop` dikembalikan sebagai hasil Future
+>
+>**2. `Navigator.pop(context, color)`:**
+>- `pop()` menutup screen kedua
+>- Parameter kedua (`color`) adalah **data yang dikembalikan**
+>- Data ini diterima oleh `await Navigator.push()` di screen pertama
+>
+>**3. Operator `??` (Null-aware):**
+>```dart
+>color = await Navigator.push(...) ?? Colors.blue;
+>```
+>- Jika user kembali tanpa pilih warna (tekan back button), hasil = `null`
+>- Operator `??` memberikan default value `Colors.blue`
+>- Mencegah error jika `color` null
+>
+>**4. `setState()`:**
+>- Setelah menerima warna baru, `setState()` dipanggil
+>- Flutter rebuild UI dengan `color` yang baru
+>- Background screen berubah
+>
+>* Gantilah 3 warna pada langkah 5 dengan warna favorit Anda!
+>
+>```dart
+>ElevatedButton(
+>  child: const Text('Yellow'),
+>  onPressed: () {
+>    color = Colors.yellow.shade700; // ← Warna favorit 1
+>    Navigator.pop(context, color);
+>  },
+>),
+>ElevatedButton(
+>  child: const Text('Red'),
+>  onPressed: () {
+>    color = Colors.red.shade700; // ← Warna favorit 2
+>    Navigator.pop(context, color);
+>  },
+>),
+>ElevatedButton(
+>  child: const Text('Orange'),
+>  onPressed: () {
+>    color = Colors.orange.shade700; // ← Warna favorit 3
+>    Navigator.pop(context, color);
+>  },
+>),
+>```
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 16**".
+
+Hasilnya akan seperti gambar berikut ini.
+
+![alt text](books/images/hasil_praktikum8_soal15.gif)

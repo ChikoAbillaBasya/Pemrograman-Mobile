@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 import 'geolocation.dart';
+import 'navigation_first.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Future Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const LocationScreen(),
+      home: const NavigationFirst(),
+      // home: const LocationScreen(),
       // theme: ThemeData(
       //   primarySwatch: Colors.blue,
       //   visualDensity: VisualDensity.adaptivePlatformDensity,
