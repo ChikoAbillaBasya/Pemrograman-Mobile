@@ -1652,7 +1652,7 @@ Lakukan run, jika terjadi error silakan diperbaiki.
 
 Hasilnya akan seperti gambar berikut ini.
 
-![alt text](books/images/hasil_praktikum8_soal15.gif)
+![alt text](books/images/hasil_praktikum8_soal16.gif)
 
 ## **Praktikum 9: Memanfaatkan async/await dengan Widget Dialog**
 Pada praktikum ini, Anda akan memanfaatkan widget `AlertDialog`. Anda bisa manfaatkan widget ini misal untuk memilih operasi Save, Delete, Accept, dan sebagainya.
@@ -1756,7 +1756,7 @@ home: const NavigationDialog(),
 ### **Langkah 6: Run**
 Coba ganti warna background dengan widget dialog tersebut. Jika terjadi error, silakan diperbaiki. Jika berhasil, akan tampil seperti gambar berikut.
 
-![alt text](hasil_praktikum9_soal17.gif)
+![alt text](books/images/hasil_praktikum9_soal17.gif)
 
 >#### **Soal 17**
 >* Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
