@@ -1159,31 +1159,65 @@ Widget build(BuildContext context) {
 >* Jika Anda tidak melihat animasi loading tampil, kemungkinan itu berjalan sangat cepat. Tambahkan delay pada method `getPosition()` dengan kode `await Future.delayed(const Duration(seconds: 3));`
 >* Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
 >
->**Jawab:**
+>**Jawaban:**
 >
->**TIDAK**, koordinat GPS **tidak akan muncul** ketika run di browser.
+>**YA, BISA!** Koordinat GPS **dapat muncul** ketika run di browser.
 >
->**Alasan:**
+>**Penjelasan:**
 >
->a. Plugin `geolocator` membutuhkan **native platform API** (Android/iOS)
+>Plugin `geolocator` **mendukung web platform** dan menggunakan **HTML5 Geolocation API** yang tersedia di browser modern.
 >
->b. Browser **tidak memiliki akses** ke GPS hardware secara langsung seperti native app
+>**Cara Kerja di Browser:**
 >
->c. Meskipun browser punya **Geolocation API**, plugin geolocator Flutter tidak support web
+>1. **Browser memiliki Geolocation API**: API bawaan browser yang bisa akses lokasi
+>2. **Geolocator plugin otomatis detect platform**: 
+>   - Di mobile → gunakan native GPS
+>   - Di web → gunakan browser Geolocation API
+>3. **User harus grant permission**: Browser akan meminta izin akses lokasi
+>4. **Akurasi berbeda**:
+>   - Mobile: GPS hardware (sangat akurat)
+>   - Browser: IP address / WiFi triangulation (kurang akurat)
 >
->d.  Permission GPS (AndroidManifest.xml / Info.plist) hanya berlaku untuk **mobile platform**
+>**Saat Run di Browser:**
 >
->**Solusi:**
+>![alt text](books/images/hasil_praktikum6_soal12_browser.gif)
 >
->a. Run di **Android emulator** atau **physical device**
+>Browser akan menampilkan popup:
+>```
+>"localhost wants to know your location"
+>[Block] [Allow]
+>```
 >
->b. Run di **iOS simulator** atau **iPhone**
+>**Jika ALLOW:**
+>- ✅ Koordinat akan muncul
+>- Contoh: `Latitude: -7.xxxx, Longitude: 110.xxxx`
+>- Koordinat didapat dari WiFi/IP location
 >
->c. Untuk web, gunakan package lain yang support web seperti `geolocator_web`
+>**Jika BLOCK:**
+>- ❌ Error: "User denied Geolocation"
+>- Tidak ada koordinat yang muncul
+>
+>**Perbedaan Mobile vs Browser:**
+>
+>| Aspek | Mobile (Android/iOS) | Browser (Web) |
+>|-------|---------------------|---------------|
+>| **Source** | GPS Hardware | WiFi/IP Location |
+>| **Akurasi** | Sangat tinggi (1-10m) | Sedang (50-500m) |
+>| **Permission** | System dialog | Browser popup |
+>| **Offline** | ✅ Bisa (GPS tetap jalan) | ❌ Butuh internet |
+>| **Kecepatan** | Cepat | Tergantung koneksi |
+>
+>**Kesimpulan:**
+>
+>- ✅ **Geolocator support web** menggunakan browser Geolocation API
+>- ✅ Koordinat GPS **bisa muncul di browser**
+>- ⚠️ Akurasi di browser **lebih rendah** daripada mobile
+>- ⚠️ User **harus allow** permission di browser
+>- 🎯 Untuk **production app**, lebih baik test di **device asli** untuk akurasi maksimal
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 12**".
 
-## ***Praktikum 7: Manajemen Future dengan FutureBuilder***
+## **Praktikum 7: Manajemen Future dengan FutureBuilder**
 Pola ketika menerima beberapa data secara async dan melakukan update pada UI sebenarnya itu tergantung pada ketersediaan data. Secara umum fakta di Flutter, ada sebuah widget yang membantu Anda untuk memudahkan manajemen future yaitu widget `FutureBuilder`.
 
 Anda dapat menggunakan FutureBuilder untuk manajemen future bersamaan dengan update UI ketika ada update Future. FutureBuilder memiliki status future sendiri, sehingga Anda dapat mengabaikan penggunaan `setState`, Flutter akan membangun ulang bagian UI ketika update itu dibutuhkan.
@@ -1248,7 +1282,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-![alt text](books/images/hasil_praktikum7_soal14.gif)
+![alt text](books/images/hasil_praktikum7_soal13.gif)
 
 >#### **Soal 13**
 >* Apakah ada perbedaan UI dengan praktikum sebelumnya? Mengapa demikian?
@@ -1337,3 +1371,125 @@ Widget build(BuildContext context) {
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 13"**.
 >* Seperti yang Anda lihat, menggunakan FutureBuilder lebih efisien, clean, dan reactive dengan Future bersama UI.
+
+### **Langkah 5: Tambah handling error**
+Tambahkan kode berikut untuk menangani ketika terjadi error. Kemudian hot restart.
+```dart
+else if (snapshot.connectionState == ConnectionState.done) {
+  if (snapshot.hasError) {
+     return Text('Something terrible happened!');
+  }
+  return Text(snapshot.data.toString());
+}
+```
+
+![alt text](books/images/hasil_praktikum7_soal14.gif) 
+
+>#### **Soal 14**
+>* Apakah ada perbedaan UI dengan langkah sebelumnya? Mengapa demikian?
+>
+>**Jawab:**
+>
+>**Perbedaan UI: TIDAK ADA** (jika tidak ada error)
+>
+>**Penjelasan:**
+>
+>**Kondisi Normal (Tidak Ada Error):**
+>- UI tetap sama seperti Soal 13
+>- Menampilkan loading → koordinat GPS
+>- Tidak ada perbedaan visual
+>
+>**Kondisi Error:**
+>- **Langkah 4 (Soal 13)**: Jika error, app bisa crash atau tampil error merah
+>- **Langkah 5 (Soal 14)**: Jika error, tampil text "Something terrible happened!"
+>
+>**Kode Sebelumnya (Langkah 4):**
+>```dart
+>else if (snapshot.connectionState == ConnectionState.done) {
+>  return Text(snapshot.data.toString()); // ❌ Langsung akses data, bisa error
+>}
+>```
+>
+>**Kode Baru (Langkah 5):**
+>```dart
+>else if (snapshot.connectionState == ConnectionState.done) {
+>  if (snapshot.hasError) {              // ✅ Cek error dulu
+>    return Text('Something terrible happened!');
+>  }
+>  return Text(snapshot.data.toString()); // ✅ Akses data setelah yakin tidak error
+>}
+>```
+>
+>**Perbandingan:**
+>
+>| Aspek | Langkah 4 (Tanpa Error Handling) | Langkah 5 (Dengan Error Handling) |
+>|-------|----------------------------------|-----------------------------------|
+>| **Cek Error** | ❌ Tidak ada | ✅ Ada `snapshot.hasError` |
+>| **Jika Error** | App crash / Error merah | Tampil pesan user-friendly |
+>| **User Experience** | ❌ Buruk | ✅ Baik |
+>| **Production Ready** | ❌ Tidak aman | ✅ Aman |
+>
+>**Mengapa Tidak Ada Perbedaan Visual (Kondisi Normal)?**
+>
+>1. **GPS berfungsi normal** → tidak ada error
+>2. **Permission granted** → user izinkan akses lokasi
+>3. **Location service aktif** → GPS device hidup
+>4. **Kode error handling hanya jalan jika ada error**
+>
+>**Cara Test Error Handling:**
+>
+>Untuk melihat perbedaan, buat error sengaja:
+>
+>```dart
+>Future<Position> getPosition() async {
+>  await Geolocator.isLocationServiceEnabled();
+>  await Future.delayed(const Duration(seconds: 3));
+>  throw Exception('GPS Error!'); // ← Tambahkan ini untuk test
+>  Position position = await Geolocator.getCurrentPosition();
+>  return position;
+>}
+>```
+>
+>**Hasil:**
+>- **Tanpa error handling**: App crash atau error merah
+>- **Dengan error handling**: Tampil "Something terrible happened!"
+>
+>**Kesimpulan:**
+>
+>- **Tidak ada perbedaan UI** saat kondisi normal (GPS berhasil)
+>- **Ada perbedaan besar** saat terjadi error:
+>  - Langkah 4: App crash ❌
+>  - Langkah 5: Tampil pesan error yang friendly ✅
+>- **Langkah 5 lebih aman dan production-ready** karena handle error dengan baik
+>
+>**Best Practice FutureBuilder:**
+>
+>```dart
+>FutureBuilder(
+>  future: myFuture,
+>  builder: (context, snapshot) {
+>    // 1. Handle loading
+>    if (snapshot.connectionState == ConnectionState.waiting) {
+>      return CircularProgressIndicator();
+>    }
+>    // 2. Handle done
+>    if (snapshot.connectionState == ConnectionState.done) {
+>      // 3. Handle error ✅ PENTING!
+>      if (snapshot.hasError) {
+>        return Text('Error: ${snapshot.error}');
+>      }
+>      // 4. Handle success
+>      if (snapshot.hasData) {
+>        return Text(snapshot.data.toString());
+>      }
+>      // 5. Handle no data
+>      return Text('No data');
+>    }
+>    return Text('');
+>  },
+>)
+>```
+>
+>**Selalu tambahkan `snapshot.hasError` check untuk aplikasi yang robust!** ✅
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 14**".
