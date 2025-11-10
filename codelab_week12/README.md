@@ -89,3 +89,30 @@ class _StreamHomePageState extends State<StreamHomePage> {
 >* Tambahkan **nama panggilan Anda** pada `title` app sebagai identitas hasil pekerjaan Anda.
 >* Gantilah warna tema aplikasi sesuai kesukaan Anda.
 >* Lakukan commit hasil jawaban Soal 1 dengan pesan **"W12: Jawaban Soal 1"**
+
+### **Langkah 3: Buat file baru stream.dart**
+Buat file baru di folder lib project Anda. Lalu isi dengan kode berikut.
+```dart
+import 'package:flutter/material.dart';
+
+class ColorStream {
+
+}
+```
+
+### **Langkah 4: Tambah variabel colors**
+Tambahkan variabel di dalam class `ColorStream` seperti berikut.
+```dart
+final List<Color> colors = [
+  Colors.red,
+  Colors.green,
+  Colors.pink,
+  Colors.yellow,
+  Colors.orange,
+  Colors.purple,
+];
+```
+
+>#### **Soal 2**
+>* Tambahkan 5 warna lainnya sesuai keinginan Anda pada variabel `colors` tersebut.
+>* Lakukan commit hasil jawaban Soal 2 dengan pesan **"W12: Jawaban Soal 2"**
