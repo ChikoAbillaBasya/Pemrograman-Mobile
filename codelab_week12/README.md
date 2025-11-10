@@ -116,3 +116,40 @@ final List<Color> colors = [
 >#### **Soal 2**
 >* Tambahkan 5 warna lainnya sesuai keinginan Anda pada variabel `colors` tersebut.
 >* Lakukan commit hasil jawaban Soal 2 dengan pesan **"W12: Jawaban Soal 2"**
+
+### **Langkah 5: Tambah method getColors()**
+Di dalam `class ColorStream` ketik method seperti kode berikut. Perhatikan tanda bintang di akhir keyword `async*` (ini digunakan untuk melakukan `Stream` data)
+```dart
+Stream<Color> getColors() async* {
+
+}
+```
+
+### **Langkah 6: Tambah perintah yield***
+Tambahkan kode berikut ini.
+```dart
+yield* Stream.periodic(
+  const Duration(seconds: 1), (int t) {
+    int index = t % colors.length;
+    return colors[index];
+});
+```
+
+>#### **Soal 3**
+>* Jelaskan fungsi keyword `yield*` pada kode tersebut!
+>
+>**Jawab:**
+>
+>Fungsi keyword `yield*` digunakan untuk mengembalikan (yield) **seluruh nilai dari Stream lain** ke dalam Stream yang sedang dibuat. Berbeda dengan `yield` yang mengembalikan satu nilai, `yield*` mengembalikan semua nilai dari Stream secara berurutan.
+>
+>* Apa maksud isi perintah kode tersebut?
+>
+>**Jawab:**
+>
+>1. Stream.periodic → Membuat stream yang mengirimkan data secara berkala/periodik
+>2. Duration(seconds: 1) → Interval waktu 1 detik untuk setiap emission
+>3. (int t) → Parameter t adalah counter yang dimulai dari 0 dan bertambah setiap interval
+>4. t % colors.length → Operasi modulo untuk mendapatkan index yang berputar (0 sampai panjang colors - 1)
+>5. return colors[index] → Mengembalikan warna pada index tersebut
+>
+>* Lakukan commit hasil jawaban Soal 3 dengan pesan **"W12: Jawaban Soal 3"**
