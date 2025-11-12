@@ -508,3 +508,120 @@ Lakukan running pada aplikasi Flutter Anda, maka akan terlihat seperti gambar be
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 >* Lalu lakukan commit dengan pesan **"W12: Jawaban Soal 6"**.
+
+### **Langkah 13: Buka stream.dart**
+Tambahkan method berikut ini.
+```dart
+addError() {
+  controller.sink.addError('error');
+}
+```
+
+### **Langkah 14: Buka main.dart**
+Tambahkan method onError di dalam class StreamHomePageState pada method listen di fungsi initState() seperti berikut ini.
+```dart
+stream.listen((event) {
+  setState(() {
+    lastNumber = event;
+  });
+}).onError((error) {
+  setState(() {
+    lastNumber = -1;
+  });
+});
+```
+
+### **Langkah 15: Edit method addRandomNumber()**
+Lakukan comment pada dua baris kode berikut, lalu ketik kode seperti berikut ini.
+```dart
+void addRandomNumber() {
+  Random random = Random();
+  //int myNum = random.nextInt(10);
+  //numberStream.addNumberToSink(myNum);
+  numberStream.addError();
+}
+```
+
+>#### **Soal 7**
+>* Jelaskan maksud kode langkah 13 sampai 15 tersebut!
+>
+>**Jawab:**
+>
+>#### **Penjelasan Lengkap Langkah 13-15:**
+>
+>Ketiga langkah ini mendemonstrasikan **error handling** pada Stream di Flutter. Berikut penjelasan detail setiap langkah:
+>
+>---
+>
+>#### **Langkah 13: Menambahkan method addError()**
+>
+>```dart
+>addError() {
+>  controller.sink.addError('error');
+>}
+>```
+>
+>**Penjelasan:**
+>- Membuat method `addError()` di class `NumberStream`
+>- Method ini mengirim **error** ke stream menggunakan `controller.sink.addError()`
+>- Berbeda dengan `add()` yang mengirim data, `addError()` mengirim error/exception
+>- Parameter `'error'` adalah pesan error yang dikirim
+>- Sink dapat mengirim dua jenis event:
+>  - **Data event** → menggunakan `sink.add(data)`
+>  - **Error event** → menggunakan `sink.addError(error)`
+>
+>**Fungsi:**
+>- Mensimulasikan kondisi error dalam stream
+>- Berguna untuk testing error handling
+>- Meniru kondisi error real seperti: network failure, timeout, invalid data, dll
+>
+>---
+>
+>#### **Langkah 14: Menambahkan onError handler**
+>
+>```dart
+>stream.listen((event) {
+>  setState(() {
+>    lastNumber = event;
+>  });
+>}).onError((error) {
+>  setState(() {
+>    lastNumber = -1;
+>  });
+>});
+>```
+>
+>**Penjelasan:**
+>- Menambahkan **error handler** pada stream listener
+>- Method `onError()` adalah callback yang dipanggil ketika stream mengirim error
+>- Ketika error terjadi, `lastNumber` diset menjadi **-1** sebagai indikator error
+>- Ini adalah cara **graceful error handling** - aplikasi tidak crash, tapi menampilkan nilai khusus
+>
+>**Komponen:**
+>1. **`listen((event) { ... })`** → Handler untuk data normal
+>2. **`onError((error) { ... })`** → Handler untuk error
+>3. **`setState(() { lastNumber = -1; })`** → Update UI dengan nilai error indicator
+>
+>---
+>
+>#### **Langkah 15: Mengubah addRandomNumber() untuk trigger error**
+>
+>```dart
+>void addRandomNumber() {
+>  Random random = Random();
+>  //int myNum = random.nextInt(10);
+>  //numberStream.addNumberToSink(myNum);
+>  numberStream.addError();
+>}
+>```
+>
+>**Penjelasan:**
+>- Men-comment kode yang mengirim data normal
+>- Menggantinya dengan `numberStream.addError()` untuk mengirim error
+>- Sekarang setiap kali button diklik, bukan mengirim angka random, tapi mengirim error
+>- Ini untuk **testing** apakah error handling bekerja dengan benar
+>
+>---
+>
+>* Kembalikan kode seperti semula pada Langkah 15, comment `addError()` agar Anda dapat melanjutkan ke praktikum 3 berikutnya
+>* Lalu lakukan commit dengan pesan **"W12: Jawaban Soal 7"**. 
