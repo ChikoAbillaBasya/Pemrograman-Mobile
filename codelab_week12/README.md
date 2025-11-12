@@ -625,3 +625,168 @@ void addRandomNumber() {
 >
 >* Kembalikan kode seperti semula pada Langkah 15, comment `addError()` agar Anda dapat melanjutkan ke praktikum 3 berikutnya
 >* Lalu lakukan commit dengan pesan **"W12: Jawaban Soal 7"**. 
+
+## **Praktikum 3: Injeksi data ke streams**
+Skenario yang umum dilakukan adalah melakukan manipulasi atau transformasi data stream sebelum sampai pada UI end user. Hal ini sangatlah berguna ketika Anda membutuhkan untuk filter data berdasarkan kondisi tertentu, melakukan validasi data, memodifikasinya, atau melakukan proses lain yang memicu beberapa output baru. Contohnya melakukan konversi angka ke string, membuat sebuah perhitungan, atau menghilangkan data yang berulang terus tampil.
+
+Pada praktikum 3 ini, Anda akan menggunakan `StreamTransformers` ke dalam `stream` untuk melakukan `map` dan filter data.
+
+Setelah Anda menyelesaikan praktikum 2, Anda dapat melanjutkan praktikum 3 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 2.
+
+### **Langkah 1: Buka main.dart**
+Tambahkan variabel baru di dalam `class _StreamHomePageState`
+```dart
+late StreamTransformer transformer;
+```
+
+### **Langkah 2: Tambahkan kode ini di initState**
+```dart
+transformer = StreamTransformer<int, int>.fromHandlers(
+  handleData: (value, sink) {
+    sink.add(value * 10);
+  },
+  handleError: (error, trace, sink) {
+    sink.add(-1);
+  },
+  handleDone: (sink) => sink.close());
+```
+
+### **Langkah 3: Tetap di initState**
+Lakukan edit seperti kode berikut.
+```dart
+stream.transform(transformer).listen((event) {
+  setState(() {
+    lastNumber = event;
+  });
+}).onError((error) {
+  setState(() {
+    lastNumber = -1;
+  });
+});
+super.initState();
+```
+
+### **Langkah 4: Run**
+Terakhir, run atau tekan **F5** untuk melihat hasilnya jika memang belum running. Bisa juga lakukan **hot restart** jika aplikasi sudah running. Maka hasilnya akan seperti gambar berikut ini. Anda akan melihat tampilan angka dari 0 hingga 90.
+
+![alt text](<img/hasil_praktikum3_Soal 8.gif>)
+
+>#### **Soal 8**
+>* Jelaskan maksud kode langkah 1-3 tersebut!
+>
+>**Jawab:**
+>
+>#### **Penjelasan Lengkap StreamTransformer (Langkah 1-3):**
+>
+>`StreamTransformer` adalah tool untuk **memanipulasi/transformasi data** sebelum data sampai ke listener. Ini sangat berguna untuk:
+>- ✅ Mengubah format data
+>- ✅ Melakukan kalkulasi/perhitungan
+>- ✅ Filter data berdasarkan kondisi
+>- ✅ Validasi data
+>- ✅ Menangani error dengan cara khusus
+>
+>---
+>
+>#### **Langkah 1: Deklarasi StreamTransformer**
+>
+>```dart
+>late StreamTransformer transformer;
+>```
+>
+>**Penjelasan:**
+>- Mendeklarasikan variabel `transformer` dengan tipe `StreamTransformer`
+>- Menggunakan keyword `late` karena inisialisasi dilakukan di `initState()`
+>- Transformer ini akan digunakan untuk memodifikasi data stream
+>
+>---
+>
+>#### **Langkah 2: Inisialisasi StreamTransformer dengan Handlers**
+>
+>```dart
+>transformer = StreamTransformer<int, int>.fromHandlers(
+>  handleData: (value, sink) {
+>    sink.add(value * 10);
+>  },
+>  handleError: (error, trace, sink) {
+>    sink.add(-1);
+>  },
+>  handleDone: (sink) => sink.close()
+>);
+>```
+>
+>**Penjelasan Detail:**
+>
+>**1. `StreamTransformer<int, int>.fromHandlers`**
+>   - `<int, int>` → Input: int, Output: int
+>   - `.fromHandlers` → Membuat transformer dengan custom handlers
+>   - Ada 3 handler yang bisa didefinisikan: `handleData`, `handleError`, `handleDone`
+>
+>**2. `handleData: (value, sink) { sink.add(value * 10); }`**
+>   - **Handler untuk data normal** yang masuk ke stream
+>   - Parameter `value` → Data asli dari stream (angka 0-9)
+>   - Parameter `sink` → Sink output untuk mengirim data yang sudah ditransform
+>   - **`sink.add(value * 10)`** → Mengalikan nilai dengan 10 sebelum dikirim
+>   - Contoh transformasi:
+>     - Input: 0 → Output: 0
+>     - Input: 1 → Output: 10
+>     - Input: 5 → Output: 50
+>     - Input: 9 → Output: 90
+>
+>**3. `handleError: (error, trace, sink) { sink.add(-1); }`**
+>   - **Handler untuk error** yang terjadi di stream
+>   - Parameter `error` → Object error yang terjadi
+>   - Parameter `trace` → Stack trace untuk debugging
+>   - Parameter `sink` → Sink output untuk mengirim data
+>   - **`sink.add(-1)`** → Mengirim -1 sebagai indikator error
+>   - Ini akan menggantikan error dengan nilai -1
+>
+>**4. `handleDone: (sink) => sink.close()`**
+>   - **Handler ketika stream selesai/completed**
+>   - Parameter `sink` → Sink output
+>   - **`sink.close()`** → Menutup sink ketika stream selesai
+>   - Memastikan tidak ada memory leak
+>
+>---
+>
+>#### **Langkah 3: Menggunakan Transformer pada Stream**
+>
+>```dart
+>stream.transform(transformer).listen((event) {
+>  setState(() {
+>    lastNumber = event;
+>  });
+>}).onError((error) {
+>  setState(() {
+>    lastNumber = -1;
+>  });
+>});
+>super.initState();
+>```
+>
+>**Penjelasan:**
+>
+>**1. `stream.transform(transformer)`**
+>   - Menerapkan transformer ke stream
+>   - Data dari stream akan melalui transformer terlebih dahulu
+>   - Transformer akan mengalikan data dengan 10
+>
+>**2. `.listen((event) { ... })`**
+>   - Subscribe ke stream yang sudah ditransform
+>   - Parameter `event` berisi data yang **sudah ditransform** (0, 10, 20, ..., 90)
+>   - Bukan data asli (0, 1, 2, ..., 9)
+>
+>**3. `setState(() { lastNumber = event; })`**
+>   - Update UI dengan nilai yang sudah ditransform
+>   - Menampilkan angka hasil perkalian 10
+>
+>**4. `.onError((error) { ... })`**
+>   - Error handler untuk stream
+>   - Jika ada error, set `lastNumber = -1`
+>   - Double protection (sudah di-handle di transformer dan di listener)
+>
+>---
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+>* Lalu lakukan commit dengan pesan **"W12: Jawaban Soal 8"**.
