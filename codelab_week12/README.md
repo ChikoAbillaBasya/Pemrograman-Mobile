@@ -1148,3 +1148,190 @@ Tekan button ‘**New Random Number**' beberapa kali, maka akan tampil teks angk
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 >* Lalu lakukan commit dengan pesan **"W12: Jawaban Soal 10,11"**.
+
+## **Praktikum 6: StreamBuilder**
+`StreamBuilder` adalah sebuah widget untuk melakukan listen terhadap event dari stream. Ketika sebuah event terkirim, maka akan dibangun ulang semua turunannya. Seperti halnya widget `FutureBuilder` pada pertemuan pekan lalu, `StreamBuilder` berguna untuk membangun UI secara reaktif yang diperbarui setiap data baru tersedia.
+
+Setelah Anda menyelesaikan praktikum 5, Anda dapat melanjutkan praktikum 6 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 5.
+
+### **Langkah 1: Buat Project Baru**
+Buatlah sebuah project flutter baru dengan nama **streambuilder_nama** (beri nama panggilan Anda) di folder **week-12/src/** repository GitHub Anda.
+
+![alt text](img/new_streambuilder.png)
+
+### **Langkah 2: Buat file baru stream.dart**
+Ketik kode ini
+```dart
+class NumberStream {}
+```
+
+### **Langkah 3: Tetap di file stream.dart**
+Ketik kode seperti berikut.
+```dart
+import 'dart:math';
+
+class NumberStream {
+  Stream<int> getNumbers() async* {
+    yield* Stream.periodic(const Duration(seconds: 1), (int t) {
+      Random random = Random();
+      int myNum = random.nextInt(10);
+      return myNum;
+    });
+  }
+}
+```
+
+### **Langkah 4: Edit main.dart**
+Ketik kode seperti berikut ini.
+```dart
+import 'package.flutter/material.dart';
+import 'stream.dart';
+import 'dart:async';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Stream',
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+      ),
+      home: const StreamHomePage(),
+    );
+  }
+}
+
+class StreamHomePage extends StatefulWidget {
+  const StreamHomePage({super.key});
+
+  @override
+  State<StreamHomePage> createState() => _StreamHomePageState();
+}
+
+class _StreamHomePageState extends State<StreamHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+        appBar: AppBar(
+        title: const Text('Stream'),
+      ),
+      body: Container(
+      ),
+    );
+  }
+}
+```
+
+### **Langkah 5: Tambah variabel**
+Di dalam `class _StreamHomePageState`, ketika variabel ini.
+```dart
+late Stream<int> numberStream;
+```
+
+### **Langkah 6: Edit initState()**
+Ketik kode seperti berikut.
+```dart
+@override
+void initState() {
+  numberStream = NumberStream().getNumbers();
+  super.initState();
+}
+```
+
+### **Langkah 7: Edit method build()**
+```dart
+body: StreamBuilder(
+  stream: numberStream,
+  initialData: 0,
+  builder: (context, snapshot) {
+    if (snapshot.hasError) {
+      print('Error!');
+    }
+    if (snapshot.hasData) {
+      return Center(
+        child: Text(
+          snapshot.data.toString(),
+          style: const TextStyle(fontSize: 96),
+        ));
+    } else {
+      return const SizedBox.shrink();
+    }
+  },
+),
+```
+
+### **Langkah 8: Run**
+Hasilnya, setiap detik akan tampil angka baru seperti berikut.
+
+![alt text](<img/hasil_praktikum6_Soal 12.gif>)
+
+>#### **Soal 12**
+>* Jelaskan maksud kode pada langkah 3 dan 7 !
+>
+>**Jawab:**
+>
+>#### **Langkah 3: Stream Generator `getNumbers()`**
+>
+>```dart
+>Stream<int> getNumbers() async* {
+>  yield* Stream.periodic(const Duration(seconds: 1), (int t) {
+>    Random random = Random();
+>    int myNum = random.nextInt(10);
+>    return myNum;
+>  });
+>}
+>```
+>
+>**Penjelasan:**
+>- `async*` → Generator function yang menghasilkan stream
+>- `Stream.periodic` → Membuat stream yang emit data secara periodik (setiap 1 detik)
+>- `Random().nextInt(10)` → Generate angka random 0-9
+>- `yield*` → Meneruskan semua nilai dari `Stream.periodic` ke stream output
+>- **Hasil:** Stream yang emit angka random (0-9) setiap 1 detik secara terus-menerus
+>
+>#### **Langkah 7: StreamBuilder Widget**
+>
+>```dart
+>StreamBuilder(
+>  stream: numberStream,
+>  initialData: 0,
+>  builder: (context, snapshot) {
+>    if (snapshot.hasError) {
+>      print('Error!');
+>    }
+>    if (snapshot.hasData) {
+>      return Center(
+>        child: Text(
+>          snapshot.data.toString(),
+>          style: const TextStyle(fontSize: 96),
+>        ),
+>      );
+>    } else {
+>      return const SizedBox.shrink();
+>    }
+>  },
+>)
+>```
+>
+>**Penjelasan:**
+>- `StreamBuilder` → Widget yang listen ke stream dan rebuild UI otomatis
+>- `stream: numberStream` → Stream yang di-listen
+>- `initialData: 0` → Data awal sebelum stream emit data pertama
+>- `builder` → Callback yang dipanggil setiap ada data baru
+>- `snapshot.hasData` → Cek apakah ada data
+>- `snapshot.data` → Data terbaru dari stream
+>- **Hasil:** UI otomatis update setiap 1 detik dengan angka random baru tanpa perlu manual `setState()`
+>
+>---
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+>* Lalu lakukan commit dengan pesan "W12: Jawaban Soal 12".
