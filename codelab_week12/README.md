@@ -790,3 +790,258 @@ Terakhir, run atau tekan **F5** untuk melihat hasilnya jika memang belum running
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 >* Lalu lakukan commit dengan pesan **"W12: Jawaban Soal 8"**.
+
+## **Praktikum 4: Subscribe ke stream events**
+Dari praktikum sebelumnya, Anda telah menggunakan method `listen` mendapatkan nilai dari `stream`. Ini akan menghasilkan sebuah `Subscription`. `Subscription` berisi method yang dapat digunakan untuk melakukan `listen` pada suatu event dari `stream` secara terstruktur.
+
+Pada praktikum 4 ini, kita akan gunakan `Subscription` untuk menangani event dan error dengan teknik praktik baik (best practice), dan menutup `Subscription` tersebut.
+
+Setelah Anda menyelesaikan praktikum 3, Anda dapat melanjutkan praktikum 4 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 3.
+
+### **Langkah 1: Tambah variabel**
+Tambahkan variabel berikut di `class _StreamHomePageState`
+```dart
+late StreamSubscription subscription;
+```
+
+### **Langkah 2: Edit initState()**
+Edit kode seperti berikut ini.
+```dart
+@override
+void initState() {
+  numberStream = NumberStream();
+  numberStreamController = numberStream.controller;
+  Stream stream = numberStreamController.stream;
+  subscription = stream.listen((event) {
+    setState(() {
+      lastNumber = event;
+    });
+  });
+  super.initState();
+}
+```
+
+### **Langkah 3: Tetap di initState()**
+Tambahkan kode berikut ini.
+```dart
+subscription.onError((error) {
+  setState(() {
+    lastNumber = -1;
+  });
+});
+```
+
+### **Langkah 4: Tambah properti onDone()**
+Tambahkan dibawahnya kode ini setelah onError
+```dart
+subscription.onDone(() {
+  print('OnDone was called');
+});
+```
+
+### **Langkah 5: Tambah method baru**
+Ketik method ini di dalam class _StreamHomePageState
+```dart
+void stopStream() {
+  numberStreamController.close();
+}
+```
+
+### **Langkah 6: Pindah ke method dispose()**
+Jika method dispose() belum ada, Anda dapat mengetiknya dan dibuat override. Ketik kode ini didalamnya.
+```dart
+subscription.cancel();
+```
+
+### **Langkah 7: Pindah ke method build()**
+Tambahkan button kedua dengan isi kode seperti berikut ini.
+```dart
+ElevatedButton(
+  onPressed: () => stopStream(),
+  child: const Text('Stop Subscription'),
+)
+```
+
+### **Langkah 8: Edit method addRandomNumber()**
+Edit kode seperti berikut ini.
+```dart
+void addRandomNumber() {
+  Random random = Random();
+  int myNum = random.nextInt(10);
+  if (!numberStreamController.isClosed) {
+    numberStream.addNumberToSink(myNum);
+  } else {
+    setState(() {
+      lastNumber = -1;
+    });
+  }
+}
+```
+
+### **Langkah 9: Run**
+Anda akan melihat dua button seperti gambar berikut.
+
+![alt text](<img/hasil_praktikum4_Soal 9.gif>)
+
+### **Langkah 10: Tekan button ‘Stop Subscription'**
+Anda akan melihat pesan di Debug Console seperti berikut.
+
+![alt text](<img/hasil_praktikum4_Langkah 10.png>)
+
+>#### **Soal 9**
+>* Jelaskan maksud kode langkah 2, 6 dan 8 tersebut!
+>
+>**Jawab:**
+>
+>#### **Penjelasan Lengkap StreamSubscription (Langkah 2, 6, dan 8):**
+>
+>`StreamSubscription` adalah object yang dikembalikan ketika kita melakukan `listen()` pada stream. Subscription ini memberikan **kontrol penuh** atas stream listening, seperti pause, resume, cancel, dan handle events.
+>
+>---
+>
+>#### **Langkah 2: Membuat dan Menyimpan Subscription**
+>
+>```dart
+>@override
+>void initState() {
+>  numberStream = NumberStream();
+>  numberStreamController = numberStream.controller;
+>  Stream stream = numberStreamController.stream;
+>  subscription = stream.listen((event) {
+>    setState(() {
+>      lastNumber = event;
+>    });
+>  });
+>  super.initState();
+>}
+>```
+>
+>**Penjelasan:**
+>
+>**1. Perubahan dari praktikum sebelumnya:**
+>   - **Sebelumnya (Praktikum 3):** 
+>     ```dart
+>     stream.transform(transformer).listen((event) { ... });
+>     ```
+>   - **Sekarang (Praktikum 4):**
+>     ```dart
+>     subscription = stream.listen((event) { ... });
+>     ```
+>
+>**2. Mengapa disimpan ke variabel `subscription`?**
+>   - Agar bisa **mengontrol** subscription di kemudian hari
+>   - Bisa di-**cancel**, **pause**, atau **resume**
+>   - Bisa menambahkan **error handler** dan **done handler**
+>   - **Best practice** untuk memory management
+>
+>**3. Method `listen()` mengembalikan `StreamSubscription`:**
+>   - Type: `StreamSubscription<int>`
+>   - Berisi method: `cancel()`, `pause()`, `resume()`, `onError()`, `onDone()`
+>
+>**4. Keuntungan menyimpan subscription:**
+>   - ✅ Bisa di-cancel saat widget di-dispose → **Mencegah memory leak**
+>   - ✅ Bisa menambahkan error handler secara terpisah
+>   - ✅ Bisa menambahkan done handler
+>   - ✅ Lebih terstruktur dan mudah di-maintain
+>
+>---
+>
+>#### **Langkah 6: Cancel Subscription di dispose()**
+>
+>```dart
+>@override
+>void dispose() {
+>  subscription.cancel();
+>  super.dispose();
+>}
+>```
+>
+>**Penjelasan:**
+>
+>**1. Mengapa perlu cancel subscription?**
+>   - **Mencegah memory leak** → Stream terus berjalan meskipun widget sudah dihapus
+>   - **Mencegah error** → setState() dipanggil pada widget yang sudah di-dispose
+>   - **Best practice** → Selalu cleanup resources yang tidak dipakai
+>   - **Performance** → Menghentikan proses yang tidak perlu
+>
+>**2. `subscription.cancel()`:**
+>   - Membatalkan/menghentikan subscription ke stream
+>   - Stream tidak akan mengirim data ke listener lagi
+>   - Memory yang digunakan subscription akan dibersihkan
+>   - Subscription tidak bisa di-resume setelah di-cancel
+>
+>**3. Kapan `dispose()` dipanggil?**
+>   - Ketika widget dihapus dari widget tree
+>   - Ketika user navigate ke halaman lain
+>   - Ketika aplikasi ditutup
+>
+>**4. Konsekuensi jika TIDAK cancel subscription:**
+>   - ❌ Memory leak → Memory terus terpakai
+>   - ❌ Error: "setState() called after dispose()"
+>   - ❌ Listener masih berjalan di background
+>   - ❌ Battery drain (untuk real-time apps)
+>
+>---
+>
+>#### **Langkah 8: Validasi sebelum mengirim data**
+>
+>```dart
+>void addRandomNumber() {
+>  Random random = Random();
+>  int myNum = random.nextInt(10);
+>  if (!numberStreamController.isClosed) {
+>    numberStream.addNumberToSink(myNum);
+>  } else {
+>    setState(() {
+>      lastNumber = -1;
+>    });
+>  }
+>}
+>```
+>
+>**Penjelasan:**
+>
+>**1. `if (!numberStreamController.isClosed)`:**
+>   - Mengecek apakah StreamController **masih terbuka/aktif**
+>   - `isClosed` returns `true` jika controller sudah di-close
+>   - `!isClosed` berarti controller **belum** di-close (masih aktif)
+>
+>**2. Mengapa perlu pengecekan ini?**
+>   - **Mencegah error** → Tidak bisa add data ke controller yang sudah closed
+>   - **User experience** → Memberikan feedback yang jelas
+>   - **Defensive programming** → Antisipasi kondisi edge case
+>
+>**3. Kondisi 1: Controller masih terbuka (`!isClosed = true`)**
+>   ```dart
+>   numberStream.addNumberToSink(myNum);
+>   ```
+>   - Kirim data random ke stream **secara normal**
+>   - Data akan diterima oleh listener
+>   - UI akan update dengan angka baru
+>
+>**4. Kondisi 2: Controller sudah tertutup (`!isClosed = false`)**
+>   ```dart
+>   setState(() {
+>     lastNumber = -1;
+>   });
+>   ```
+>   - Tidak bisa kirim data karena controller sudah closed
+>   - Tampilkan **-1** sebagai indikator bahwa stream sudah berhenti
+>   - User mendapat feedback visual bahwa subscription sudah di-stop
+>
+>---
+>
+>#### **Rangkuman Ketiga Langkah:**
+>
+>| Langkah | Fungsi Utama | Tujuan |
+>|---------|--------------|--------|
+>| **Langkah 2** | Simpan subscription | Kontrol stream listening |
+>| **Langkah 6** | Cancel subscription | Cleanup & prevent memory leak |
+>| **Langkah 8** | Validasi controller | Prevent error & better UX |
+>
+>---
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+>* Lalu lakukan commit dengan pesan **"W12: Jawaban Soal 9"**.
