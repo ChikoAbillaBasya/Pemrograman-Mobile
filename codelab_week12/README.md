@@ -152,6 +152,8 @@ yield* Stream.periodic(
 >4. t % colors.length → Operasi modulo untuk mendapatkan index yang berputar (0 sampai panjang colors - 1)
 >5. return colors[index] → Mengembalikan warna pada index tersebut
 >
+>---
+>
 >* Lakukan commit hasil jawaban Soal 3 dengan pesan **"W12: Jawaban Soal 3"**
 
 ### **Langkah 7: Buka main.dart**
@@ -299,6 +301,8 @@ colorStream.getColors().listen((eventColor) {
 >b.  **Gunakan `listen()`** ketika perlu proses non-blocking, kontrol penuh (cancel, error handling), dan aplikasi reactive
 >
 >c. **`listen()` lebih cocok untuk aplikasi Flutter** karena tidak memblokir UI thread
+>
+>---
 >
 >* Lakukan commit hasil jawaban Soal 5 dengan pesan **"W12: Jawaban Soal 5"**
 
