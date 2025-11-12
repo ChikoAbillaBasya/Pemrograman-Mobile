@@ -1045,3 +1045,106 @@ Anda akan melihat pesan di Debug Console seperti berikut.
 >
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 >* Lalu lakukan commit dengan pesan **"W12: Jawaban Soal 9"**.
+
+## **Praktikum 5: Multiple stream subscriptions**
+Secara default, stream hanya bisa digunakan untuk satu subscription. Jika Anda mencoba untuk melakukan subscription yang sama lebih dari satu, maka akan terjadi error. Untuk menangani hal itu, tersedia **broadcast** stream yang dapat digunakan untuk multiple subscriptions. Pada praktikum ini, Anda akan mencoba untuk melakukan multiple stream subscriptions.
+
+Setelah Anda menyelesaikan praktikum 4, Anda dapat melanjutkan praktikum 5 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 4.
+
+### **Langkah 1: Buka file main.dart**
+Ketik variabel berikut di `class _StreamHomePageState`
+```dart
+late StreamSubscription subscription2;
+String values = '';
+```
+
+### **Langkah 2: Edit initState()**
+Ketik kode seperti berikut.
+```dart
+subscription = stream.listen((event) {
+  setState(() {
+    values += '$event - ';
+  });
+});
+
+subscription2 = stream.listen((event) {
+  setState(() {
+    values += '$event - ';
+  });
+});
+```
+
+### **Langkah 3: Run**
+Lakukan run maka akan tampil error seperti gambar berikut.
+
+![alt text](<img/hasil_praktikum5_Langkah 3.png>)
+
+>#### **Soal 10**
+>* Jelaskan mengapa error itu bisa terjadi ?
+>
+>**Jawab:**
+>
+>Error terjadi karena **default stream adalah single-subscription stream**, yang hanya bisa di-listen oleh **satu listener**. Ketika mencoba melakukan listen kedua kali pada stream yang sama, Dart akan throw error `"Stream has already been listened to"`.
+>
+>**Penjelasan:**
+>1. `StreamController` secara default membuat **single-subscription stream**
+>2. Single-subscription stream hanya mengizinkan **1 listener aktif**
+>3. Ketika `subscription = stream.listen(...)` dipanggil, stream ditandai sebagai "sudah di-listen"
+>4. Ketika `subscription2 = stream.listen(...)` dipanggil, stream mendeteksi sudah ada listener dan throw error
+>
+>**Solusi:**
+>Gunakan **broadcast stream** untuk mengizinkan multiple subscriptions:
+>```dart
+>Stream stream = numberStreamController.stream.asBroadcastStream();
+>```
+>
+>Atau buat broadcast controller dari awal:
+>```dart
+>final StreamController<int> controller = StreamController<int>.broadcast();
+>```
+
+### **Langkah 4: Set broadcast stream**
+Ketik kode seperti berikut di method `initState()`
+```dart
+void initState() {
+  numberStream = NumberStream();
+  numberStreamController = numberStream.controller;
+  Stream stream = numberStreamController.stream.
+asBroadcastStream();
+  ...
+```
+
+### **Langkah 5: Edit method build()**
+Tambahkan text seperti berikut
+```dart
+child: Column(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: [
+    Text(values),
+```
+
+### **Langkah 6: Run**
+Tekan button ‘**New Random Number**' beberapa kali, maka akan tampil teks angka terus bertambah sebanyak dua kali.
+
+![alt text](<img/hasil_praktikum5_Soal 10,11.gif>)
+
+>#### **Soal 11**
+>* Jelaskan mengapa hal itu bisa terjadi ?
+>
+>**Jawab:**
+>
+>Angka muncul **dua kali** karena terdapat **dua subscription** (`subscription` dan `subscription2`) yang mendengarkan stream yang sama. Ketika broadcast stream emit data, **semua listener menerima data tersebut secara bersamaan**.
+>
+>**Kesimpulan:**
+>- Broadcast stream memungkinkan **multiple listeners**
+>- Setiap listener menerima **data yang sama**
+>- Karena ada 2 listeners yang sama-sama menambah ke variabel `values`, maka setiap angka muncul **2 kali**
+>- Jika ada 3 listeners, maka akan muncul **3 kali**, dan seterusnya
+>
+>---
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+>* Lalu lakukan commit dengan pesan **"W12: Jawaban Soal 10,11"**.

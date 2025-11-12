@@ -32,6 +32,8 @@ class _StreamHomePageState extends State<StreamHomePage> {
   late StreamController numberStreamController;
   late NumberStream numberStream;
   late StreamSubscription subscription;
+  late StreamSubscription subscription2;
+  String values = '';
 
   @override
   void initState() {
@@ -39,11 +41,18 @@ class _StreamHomePageState extends State<StreamHomePage> {
 
     numberStream = NumberStream();
     numberStreamController = numberStream.controller;
-    Stream stream = numberStreamController.stream;
+
+    Stream stream = numberStreamController.stream.asBroadcastStream();
 
     subscription = stream.listen((event) {
       setState(() {
-        lastNumber = event;
+        values += '$event - ';
+      });
+    });
+
+    subscription2 = stream.listen((event) {
+      setState(() {
+        values += '$event - ';
       });
     });
 
@@ -77,6 +86,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
   @override
   void dispose() {
     subscription.cancel();
+    subscription2.cancel();
     super.dispose();
   }
 
@@ -90,10 +100,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              lastNumber.toString(),
-              style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-            ),
+            Text(values, style: const TextStyle(fontSize: 24)),
             ElevatedButton(
               onPressed: () => addRandomNumber(),
               child: const Text('New Random Number'),
