@@ -211,3 +211,95 @@ Lakukan running pada aplikasi Flutter Anda, maka akan terlihat berubah warna bac
 >#### **Soal 4**
 >* Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 >* Lakukan commit hasil jawaban Soal 4 dengan pesan **"W12: Jawaban Soal 4"**
+
+### **Langkah 13: Ganti isi method changeColor()**
+Anda boleh comment atau hapus kode sebelumnya, lalu ketika kode seperti berikut.
+```dart
+colorStream.getColors().listen((eventColor) {
+  setState(() {
+    bgColor = eventColor;
+  });
+});
+```
+
+>#### **Soal 5**
+>* Jelaskan perbedaan menggunakan `listen` dan `await for` (langkah 9) !
+>
+>**Jawab:**
+>
+>#### **Perbedaan `listen()` dan `await for`:**
+>
+>| Aspek | `await for` | `listen()` |
+>|-------|-------------|------------|
+>| **Sifat** | Synchronous & Blocking | Asynchronous & Non-blocking |
+>| **Eksekusi** | Menunggu setiap item secara berurutan | Mendengarkan tanpa memblokir kode lain |
+>| **Kontrol** | Lebih sederhana, linear | Lebih fleksibel dengan callback |
+>| **Use Case** | Ketika perlu proses sequential | Ketika perlu proses parallel/reactive |
+>| **Error Handling** | Menggunakan try-catch | Menggunakan `onError` parameter |
+>| **Pembatalan** | Sulit dibatalkan | Mudah dibatalkan dengan `subscription.cancel()` |
+>
+>#### **1. `await for` (Langkah 9):**
+>```dart
+>void changeColor() async {
+>  await for (var eventColor in colorStream.getColors()) {
+>    setState(() {
+>      bgColor = eventColor;
+>    });
+>  }
+>}
+>```
+>
+>**Karakteristik:**
+>- **Blocking**: Kode menunggu setiap event dari stream
+>- **Sequential**: Memproses satu per satu secara berurutan
+>- **Simple**: Sintaks lebih sederhana seperti for loop biasa
+>- **Sulit cancel**: Tidak mudah untuk membatalkan subscription
+>- **Error handling**: Menggunakan try-catch
+>
+>#### **2. `listen()` (Langkah 13):**
+>```dart
+>void changeColor() {
+>  colorStream.getColors().listen((eventColor) {
+>    setState(() {
+>      bgColor = eventColor;
+>    });
+>  });
+>}
+>```
+>
+>**Karakteristik:**
+>- **Non-blocking**: Kode tidak menunggu, langsung lanjut
+>- **Reactive**: Bereaksi saat ada data baru
+>- **Flexible**: Bisa tambahkan `onError`, `onDone`, `cancelOnError`
+>- **Controllable**: Bisa di-cancel dengan `subscription.cancel()`
+>- **Better error handling**: Mendukung callback untuk error
+>
+>#### **Contoh dengan Error Handling:**
+>```dart
+>void changeColor() {
+>  colorStream.getColors().listen(
+>    (eventColor) {
+>      setState(() {
+>        bgColor = eventColor;
+>      });
+>    },
+>    onError: (error) {
+>      print('Error occurred: $error');
+>    },
+>    onDone: () {
+>      print('Stream completed');
+>    },
+>  );
+>}
+>```
+>
+>#### **Kesimpulan:**
+>a. **Gunakan `await for`** ketika perlu proses sequential/berurutan dan kode lebih sederhana
+>
+>b.  **Gunakan `listen()`** ketika perlu proses non-blocking, kontrol penuh (cancel, error handling), dan aplikasi reactive
+>
+>c. **`listen()` lebih cocok untuk aplikasi Flutter** karena tidak memblokir UI thread
+>
+>* Lakukan commit hasil jawaban Soal 5 dengan pesan **"W12: Jawaban Soal 5"**
+
+>**Catatan**: Stream di Flutter memiliki fitur yang powerfull untuk menangani data secara async. Stream dapat dimanfaatkan pada skenario dunia nyata seperti real-time messaging, unggah dan unduh file, tracking lokasi user, bekerja dengan data sensor IoT, dan lain sebagainya.
