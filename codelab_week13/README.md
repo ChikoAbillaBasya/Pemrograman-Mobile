@@ -191,3 +191,115 @@ Jika kode sudah benar, seharusnya tampil seperti gambar berikut ini.
 >#### **Soal 2**
 >* Masukkan hasil capture layar ke laporan praktikum Anda.
 >* Lakukan commit hasil jawaban Soal 2 dengan pesan **"W13: Jawaban Soal 2"**
+
+### **Langkah 11: Buat file baru pizza.dart**
+Kita ingin mengubah data json tersebut dari String menjadi objek List. Maka perlu membuat file class baru di folder `lib/model` dengan nama file `pizza.dart`.
+
+### **Langkah 12: Model pizza.dart**
+Ketik kode berikut pada file `pizza.dart`
+```dart
+class Pizza {
+  final int id;
+  final String pizzaName;
+  final String description;
+  final double price;
+  final String imageUrl;
+}
+```
+
+### **Langkah 13: Buat constructor()**
+Di dalam class `Pizza` definisikan constructor `fromJson`, yang mana akan mengambil data berupa Map sebagai parameter dan mengubah Map ke objek Pizza seperti kode berikut:
+```dart
+Pizza.fromJson(Map<String, dynamic> json) :
+  id = json['id'],
+  pizzaName = json['pizzaName'],
+  description = json['description'],
+  price = json['price'],
+  imageUrl = json['imageUrl'];
+```
+
+### **Langkah 14: Pindah ke class _MyHomePageState**
+Tambahkan kode jsonDecode seperti berikut.
+```dart
+Future readJsonnFile() async {
+  String myString = await DefaultAssetBundle.of(context)
+      .loadString('assets/pizzalist.json');
+  List pizzaMapList = jsonDecode(myString);
+  ...
+}
+```
+
+### **Langkah 15: Pastikan impor class**
+Perhatikan pada bagian atas file bahwa telah berhasil impor kedua file berikut.
+```dart
+import 'dart:convert';
+import './pizza.dart';
+```
+
+Anda telah berhasil mengimpor pustaka yang diperlukan dan melakukan decoding string JSON menjadi List pizzaMapList pada Langkah ini. Selanjutnya, kita akan mengonversi List Map tersebut menjadi List objek Dart (List<Pizza>).
+
+### **Langkah 16: Konversi List Map ke List Objek Dart**
+Di dalam method readJsonFile(), setelah baris List pizzaMapList = jsonDecode(myString);, tambahkan kode berikut untuk mengonversi setiap Map di pizzaMapList menjadi objek Pizza dan menyimpannya ke myPizzas.
+```dart
+List<Pizza> myPizzas = [];
+for (var pizza in pizzaMapList) {
+  Pizza myPizza = Pizza.fromJson(pizza);
+  myPizzas.add(myPizza);
+}
+```
+
+### **Langkah 17: return myPizzas**
+Hapus atau komentari `setState` yang menampilkan `pizzaString` dari Langkah 7. Kemudian, kembalikan `myPizzas`.
+```dart
+return myPizzas;
+```
+
+### **Langkah 18: Perbarui Signature Method**
+Perbarui signature method `readJsonFile()` untuk secara eksplisit menunjukkan bahwa ia mengembalikan `Future` yang berisi `List`.
+```dart
+Future<List<Pizza>> readJsonFile() async {
+```
+
+### **Langkah 19: Deklarasikan Variabel State**
+Di dalam `class _MyHomePageState`, deklarasikan variabel state baru untuk menampung List objek Pizza.
+```dart
+List<Pizza> myPizzas = [];
+```
+
+### **Langkah 20: Panggil di initState dan Perbarui State**
+Perbarui method `initState()` di `_MyHomePageState` untuk memanggil `readJsonFile()`. Karena `readJsonFile()` mengembalikan `Future`, gunakan `.then()` untuk mendapatkan hasilnya, dan perbarui state `myPizzas`.
+```dart
+@override
+void initState() {
+  super.initState();
+  readJsonFile().then((value) {
+    setState(() {
+      myPizzas = value;
+    });
+  });
+}
+```
+
+### **Langkah 21: Tampilkan Data di ListView**
+Perbarui body dari Scaffold untuk menggunakan ListView.builder yang menampilkan pizzaName sebagai judul dan description sebagai subjudul dari setiap objek Pizza.
+```dart
+body: ListView.builder(
+  itemCount: myPizzas.length,
+  itemBuilder: (context, index) {
+    return ListTile(
+      title: Text(myPizzas[index].pizzaName),
+      subtitle: Text(myPizzas[index].description),
+    );
+  },
+ ));
+}
+```
+
+### **Langkah 22: Run**
+Jalankan aplikasi. Sekarang, Anda akan melihat data pizza ditampilkan dalam daftar yang lebih terstruktur sebagai objek List Dart.
+
+![alt text](<img/hasil_praktikum1_Soal 3.png>)
+
+>### **Soal 3**
+>* Masukkan hasil capture layar ke laporan praktikum Anda.
+>* Lakukan commit hasil jawaban Soal 2 dengan pesan **"W13: Jawaban Soal 3"**

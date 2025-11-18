@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'model/pizza.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,12 +9,18 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter JSON Demo - Chiko',
-      theme: ThemeData(primarySwatch: Colors.purple),
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.light,
+        ),
+        useMaterial3: true,
+      ),
       home: const MyHomePage(),
     );
   }
@@ -26,21 +34,32 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String pizzaString = '';
+  List<Pizza> myPizzas = [];
 
   @override
   void initState() {
     super.initState();
-    readJsonFile();
+    readJsonFile().then((value) {
+      setState(() {
+        myPizzas = value;
+      });
+    });
   }
 
-  Future<void> readJsonFile() async {
+  Future<List<Pizza>> readJsonFile() async {
     String myString = await DefaultAssetBundle.of(
       context,
     ).loadString('assets/pizzalist.json');
-    setState(() {
-      pizzaString = myString;
-    });
+
+    List pizzaMapList = jsonDecode(myString);
+
+    List<Pizza> myPizzas = [];
+    for (var pizza in pizzaMapList) {
+      Pizza myPizza = Pizza.fromJson(pizza);
+      myPizzas.add(myPizza);
+    }
+
+    return myPizzas;
   }
 
   @override
@@ -50,11 +69,54 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('JSON - Chiko'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: pizzaString.isEmpty
+      body: myPizzas.isEmpty
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Text(pizzaString, style: const TextStyle(fontSize: 14)),
+          : ListView.builder(
+              itemCount: myPizzas.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  elevation: 2,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      child: Text(
+                        '${myPizzas[index].id}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      myPizzas[index].pizzaName,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
+                        Text(myPizzas[index].description),
+                        const SizedBox(height: 4),
+                        Text(
+                          '\$${myPizzas[index].price.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                  ),
+                );
+              },
             ),
     );
   }
