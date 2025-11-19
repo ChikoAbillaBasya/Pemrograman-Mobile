@@ -18,3 +18,4 @@
 |Week 10         |`'Dasar Manajemen State'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week10
 |Week 11         |`'Pemrograman Asynchronous'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week11
 |Week 12         |`'Streams'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week12
+|Week 13         |`'Persistensi Data'`|https://github.com/ChikoAbillaBasya/Pemrograman-Mobile/tree/main/codelab_week13
