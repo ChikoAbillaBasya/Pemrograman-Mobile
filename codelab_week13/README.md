@@ -847,3 +847,198 @@ Jalankan aplikasi. Anda akan melihat path absolut ke direktori dokumen dan cache
 >#### **Soal 7**
 >* Capture hasil praktikum Anda dan lampirkan di README.
 >* Lalu lakukan commit dengan pesan **"W13: Jawaban Soal 7"**.
+
+## **Praktikum 6: Akses filesystem dengan direktori**
+Praktikum ini melanjutkan dari Praktikum 5, berfokus pada akses *file system* untuk mengakses directories, menggunakan library `dart:io` untuk operasi file.
+
+Setelah Anda menyelesaikan praktikum 5, Anda dapat melanjutkan praktikum 6 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 5.
+
+### **Langkah 1: Lakukan Import dart:io**
+Di file main.dart, tambahkan import untuk pustaka dart:io.
+```dart
+import 'dart:io'
+```
+
+### **Langkah 2: Tambahkan Variabel File dan Text**
+Di State class, tambahkan variabel myFile (dengan modifier late) dan fileText untuk menyimpan konten yang akan dibaca.
+```dart
+late File myFile;
+String fileText='';
+```
+
+### **Langkah 3: Buat Method writeFile()**
+Buat method asinkron writeFile() yang menggunakan myFile.writeAsString() untuk menulis konten ke file. Kata ‘Margherita, Capricciosa, Napoli' silakan Anda ganti dengan Nama Lengkap dan NIM Anda.
+```dart
+Future<bool> writeFile() async {
+  try {
+    await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+```
+
+### **Langkah 4: Inisialisasi File dan Panggil writeFile() di initState()**
+Perbarui initState(): setelah getPaths() selesai, inisialisasi myFile dengan jalur lengkap di direktori dokumen, dan panggil writeFile().
+```dart
+@override
+void initState() {
+  getPaths().then((_) {
+    myFile = File('$documentsPath/pizzas.txt');
+    writeFile();
+  });
+  super.initState();
+}
+```
+
+### **Langkah 5: Buat Method readFile()**
+Buat method asinkron readFile() yang menggunakan myFile.readAsString() untuk membaca konten file dan memperbarui fileText melalui setState().
+```dart
+Future<bool> readFile() async {
+  try {
+    // Read the file.
+    String fileContent = await myFile.readAsString();
+    setState(() {
+      fileText = fileContent;
+    });
+    return true;
+  } catch (e) {
+    // On error, return false.
+    return false;
+  }
+}
+```
+
+### **Langkah 6: Edit build() dan Tambahkan Tombol Baca**
+Di method build(), tambahkan ElevatedButton yang memanggil readFile() dan Text yang menampilkan fileText di bawahnya.
+```dart
+children: [
+  Text('Doc path: ' + documentsPath),
+  Text('Temp path: ' + tempPath),
+          
+  ElevatedButton(
+      child: const Text('Read File'),
+      onPressed: () => readFile(),
+  ),
+  Text(fileText),
+],
+```
+
+### **Langkah 7: Run**
+Jalankan aplikasi. Setelah menekan tombol 'Read File', konten yang ditulis (Margherita, Capricciosa, Napoli) akan ditampilkan atau sesuai nama dan NIM Anda.
+
+![alt text](<img/hasil_praktikum6_Soal 8.png>)
+
+>#### **Soal 8**
+>* Jelaskan maksud kode pada langkah 3 dan 7 !
+>
+>**Jawab:**
+>
+>### **Penjelasan Langkah 3: Method writeFile()**
+>
+>```dart
+>Future<bool> writeFile() async {
+>  try {
+>    await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+>    return true;
+>  } catch (e) {
+>    return false;
+>  }
+>}
+>```
+>
+>**Maksud kode:**
+>
+>Method `writeFile()` adalah fungsi **asynchronous** yang berfungsi untuk **menulis data ke file** di file system dengan penjelasan sebagai berikut:
+>
+>**1. Signature Method**
+>- `Future<bool>` - Mengembalikan Future yang berisi nilai boolean
+>- `async` - Method berjalan secara asynchronous (tidak blocking UI)
+>- Return `true` jika berhasil menulis file, `false` jika terjadi error
+>
+>**2. Try-Catch Block**
+>- **Try block**: Mencoba eksekusi kode yang mungkin menimbulkan exception
+>- **Catch block**: Menangkap dan menangani error jika terjadi kegagalan
+>- **Error Handling**: Mencegah aplikasi crash saat operasi file gagal (misalnya: permission denied, disk full)
+>
+>**3. Write Operation**
+>```dart
+>await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+>```
+>- `myFile` - Object File yang sudah diinisialisasi dengan path lengkap
+>- `.writeAsString()` - Method untuk menulis String ke file
+>- `await` - Menunggu operasi write selesai karena ini adalah async operation
+>- `'Margherita, Capricciosa, Napoli'` - Data yang akan ditulis ke file
+>
+>**4. Return Value**
+>- Return `true` jika write berhasil
+>- Return `false` jika terjadi exception (error ditangkap di catch block)
+>
+>**Contoh File yang Dibuat:**
+>```
+>Lokasi: /data/user/0/com.example.store_data_chiko/app_flutter/pizzas.txt
+>Isi: Margherita, Capricciosa, Napoli
+>```
+>
+>---
+>
+>### **Penjelasan Langkah 7: Run dan Testing**
+>
+>**Maksud Langkah 7:**
+>
+>Langkah 7 adalah tahap **testing aplikasi** untuk memverifikasi bahwa operasi file I/O (Input/Output) berjalan dengan benar.
+>
+>**Proses yang Terjadi:**
+>
+>**1. Saat App Launch (initState)**
+>```dart
+>@override
+>void initState() {
+>  super.initState();
+>  getPaths().then((_) {
+>    myFile = File('$documentsPath/pizzas.txt');
+>    writeFile();
+>  });
+>}
+>```
+>- `getPaths()` mendapatkan path documents directory
+>- Setelah path didapat, `myFile` diinisialisasi dengan path lengkap
+>- `writeFile()` otomatis dipanggil untuk membuat dan menulis file
+>- File `pizzas.txt` dibuat dengan konten "Chiko Abilla Basya, 2341720005"
+>
+>**2. User Interaction**
+>```dart
+>ElevatedButton(
+>  child: const Text('Read File'),
+>  onPressed: () => readFile(),
+>)
+>```
+>- User menekan tombol "Read File"
+>- Method `readFile()` dipanggil
+>
+>**3. File Read Operation**
+>```dart
+>Future<bool> readFile() async {
+>  try {
+>    String fileContent = await myFile.readAsString();
+>    setState(() {
+>      fileText = fileContent;
+>    });
+>    return true;
+>  } catch (e) {
+>    return false;
+>  }
+>}
+>```
+>- `myFile.readAsString()` membaca konten file
+>- Data yang dibaca disimpan ke variabel `fileContent`
+>- `setState()` memperbarui UI dengan konten file
+>- Variabel `fileText` di-update dengan konten yang dibaca
+>
+>---
+>
+>* Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+>* Lalu lakukan commit dengan pesan "W13: Jawaban Soal 8".

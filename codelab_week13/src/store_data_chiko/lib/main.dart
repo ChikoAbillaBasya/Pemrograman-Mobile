@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 import 'model/pizza.dart';
 
 void main() {
@@ -41,6 +42,9 @@ class _MyHomePageState extends State<MyHomePage> {
   String documentsPath = '';
   String tempPath = '';
 
+  late File myFile;
+  String fileText = '';
+
   @override
   void initState() {
     super.initState();
@@ -49,7 +53,11 @@ class _MyHomePageState extends State<MyHomePage> {
         myPizzas = value;
       });
     });
-    getPaths();
+
+    getPaths().then((_) {
+      myFile = File('$documentsPath/pizzas.txt');
+      writeFile();
+    });
   }
 
   Future<void> getPaths() async {
@@ -59,6 +67,29 @@ class _MyHomePageState extends State<MyHomePage> {
       documentsPath = docDir.path;
       tempPath = tempDir.path;
     });
+  }
+
+  Future<bool> writeFile() async {
+    try {
+      await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> readFile() async {
+    try {
+      // Read the file
+      String fileContent = await myFile.readAsString();
+      setState(() {
+        fileText = fileContent;
+      });
+      return true;
+    } catch (e) {
+      // On error, return false
+      return false;
+    }
   }
 
   String convertToJSON(List<Pizza> pizzas) {
@@ -95,6 +126,11 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Text('Doc path: $documentsPath'),
           Text('Temp path: $tempPath'),
+          ElevatedButton(
+            child: const Text('Read File'),
+            onPressed: () => readFile(),
+          ),
+          Text(fileText),
         ],
       ),
     );
