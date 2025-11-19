@@ -617,28 +617,6 @@ Jalankan aplikasi. Tidak akan ada perubahan visual, tetapi kode Anda kini lebih 
 >}
 >```
 >
->#### **5. Analogi Real World**
->
->Bayangkan Anda memiliki 10 cabang restoran:
->
->**❌ Tanpa Konstanta (String Literal)**
->```
->Setiap cabang menulis menu sendiri dengan tulisan tangan
->- Cabang 1: "Pizza Margherita"
->- Cabang 2: "Piza Margherita"  ← Typo!
->- Cabang 3: "Pizza Margarita"  ← Beda spelling!
->```
->**Masalah:** Inkonsistensi, sulit update, customer bingung
->
->**✅ Dengan Konstanta**
->```
->Ada template menu standar yang diprint dan dibagikan ke semua cabang
->- Semua cabang pakai template yang sama
->- Mau update? Cukup update template pusat
->- Distribusi otomatis
->```
->**Keuntungan:** Konsistensi terjamin, update mudah, tidak ada typo
->
 >#### **Kesimpulan**
 >
 >Menggunakan konstanta untuk JSON keys adalah **investment kecil** (5-10 menit membuat konstanta) untuk **benefit besar** (menghemat banyak waktu debugging dan maintenance di masa depan). Ini adalah **best practice industry standard** yang membuat kode lebih professional, robust, dan siap untuk production.
@@ -873,7 +851,7 @@ Buat method asinkron writeFile() yang menggunakan myFile.writeAsString() untuk m
 ```dart
 Future<bool> writeFile() async {
   try {
-    await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+    await myFile.writeAsString('Chiko Abilla Basya, 2341720005');
     return true;
   } catch (e) {
     return false;
@@ -942,7 +920,7 @@ Jalankan aplikasi. Setelah menekan tombol 'Read File', konten yang ditulis (Marg
 >```dart
 >Future<bool> writeFile() async {
 >  try {
->    await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+>    await myFile.writeAsString('Chiko Abilla Basya, 2341720005');
 >    return true;
 >  } catch (e) {
 >    return false;
@@ -966,7 +944,7 @@ Jalankan aplikasi. Setelah menekan tombol 'Read File', konten yang ditulis (Marg
 >
 >**3. Write Operation**
 >```dart
->await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+>await myFile.writeAsString('Chiko Abilla Basya, 2341720005');
 >```
 >- `myFile` - Object File yang sudah diinisialisasi dengan path lengkap
 >- `.writeAsString()` - Method untuk menulis String ke file
@@ -980,7 +958,7 @@ Jalankan aplikasi. Setelah menekan tombol 'Read File', konten yang ditulis (Marg
 >**Contoh File yang Dibuat:**
 >```
 >Lokasi: /data/user/0/com.example.store_data_chiko/app_flutter/pizzas.txt
->Isi: Margherita, Capricciosa, Napoli
+>Isi: Chiko Abilla Basya, 2341720005
 >```
 >
 >---

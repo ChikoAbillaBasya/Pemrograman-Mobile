@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:io'; // Langkah 1: Import dart:io
 import 'model/pizza.dart';
 
 void main() {
@@ -13,7 +11,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -40,18 +37,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<Pizza> myPizzas = [];
-
+  
   String documentsPath = '';
   String tempPath = '';
-
+  
+  // Langkah 2: Tambahkan variabel file dan text
   late File myFile;
   String fileText = '';
-
-  final pwdController = TextEditingController();
-  String myPass = '';
-
-  final storage = const FlutterSecureStorage();
-  final myKey = 'myPass';
 
   @override
   void initState() {
@@ -61,16 +53,11 @@ class _MyHomePageState extends State<MyHomePage> {
         myPizzas = value;
       });
     });
+    // Langkah 4: Inisialisasi file dan panggil writeFile
     getPaths().then((_) {
       myFile = File('$documentsPath/pizzas.txt');
       writeFile();
     });
-  }
-
-  @override
-  void dispose() {
-    pwdController.dispose();
-    super.dispose();
   }
 
   Future<void> getPaths() async {
@@ -82,34 +69,29 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // Langkah 3: Buat method writeFile()
   Future<bool> writeFile() async {
     try {
-      await myFile.writeAsString('Margherita, Capricciosa, Napoli');
+      await myFile.writeAsString('Chiko Abilla Basya, 2341720005');
       return true;
     } catch (e) {
       return false;
     }
   }
 
+  // Langkah 5: Buat method readFile()
   Future<bool> readFile() async {
     try {
+      // Read the file.
       String fileContent = await myFile.readAsString();
       setState(() {
         fileText = fileContent;
       });
       return true;
     } catch (e) {
+      // On error, return false.
       return false;
     }
-  }
-
-  Future<void> writeToSecureStorage() async {
-    await storage.write(key: myKey, value: pwdController.text);
-  }
-
-  Future<String> readFromSecureStorage() async {
-    String secret = await storage.read(key: myKey) ?? '';
-    return secret;
   }
 
   String convertToJSON(List<Pizza> pizzas) {
@@ -117,9 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<List<Pizza>> readJsonFile() async {
-    String myString = await DefaultAssetBundle.of(
-      context,
-    ).loadString('assets/pizzalist.json');
+    String myString = await DefaultAssetBundle.of(context)
+        .loadString('assets/pizzalist.json');
 
     List pizzaMapList = jsonDecode(myString);
 
@@ -134,6 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return myPizzas;
   }
 
+  // Langkah 6: Edit build() dan tambahkan tombol baca
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,41 +123,17 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('Path Provider'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: pwdController,
-                decoration: const InputDecoration(
-                  labelText: '',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                child: const Text('Save Value'),
-                onPressed: () {
-                  writeToSecureStorage();
-                },
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                child: const Text('Read Value'),
-                onPressed: () {
-                  readFromSecureStorage().then((value) {
-                    setState(() {
-                      myPass = value;
-                    });
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              Text('$myPass'),
-            ],
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text('Doc path: $documentsPath'),
+          Text('Temp path: $tempPath'),
+          ElevatedButton(
+            child: const Text('Read File'),
+            onPressed: () => readFile(),
           ),
-        ),
+          Text(fileText),
+        ],
       ),
     );
   }
