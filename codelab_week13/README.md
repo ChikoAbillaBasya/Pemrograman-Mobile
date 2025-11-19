@@ -344,7 +344,7 @@ Setelah Anda menyelesaikan praktikum 1, Anda dapat melanjutkan praktikum 2 ini. 
 
 >**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 1.
 
-Pada codelab ini, kita akan berfokus pada skema JSON yang tidak kompatibel dengan model yang telah kita buat sebelumnya. Kita akan membuat kode lebih tangguh dengan menangani type casting dan nilai null.
+Pada codelab ini, kita akan berfokus pada skema JSON yang tidak kompatibel dengan model yang telah kita buat sebelumnya. Kita akan membuat kode lebih tangguh dengan menangani *type casting* dan nilai *null*.
 
 >**Catatan**: Langkah-langkah ini mensimulasikan penggunaan data JSON yang tidak konsisten atau "rusak" (`pizzalist_broken.json`).
 
@@ -438,3 +438,210 @@ Jalankan aplikasi. Sekarang data yang tidak konsisten telah ditangani dengan bai
 >#### **Soal 4**
 >* Capture hasil running aplikasi Anda, kemudian impor ke laporan praktikum Anda!
 >* Lalu lakukan commit dengan pesan **"W13: Jawaban Soal 4"**.
+
+## **Praktikum 3: Menangani error JSON**
+Pada praktikum 3 ini, Anda akan berfokus pada Catching common JSON errors, yaitu dengan mengganti string literals (nama kunci JSON) dengan konstanta untuk menghindari error yang sulit di-debug (kesalahan pengetikan).
+
+Setelah Anda menyelesaikan praktikum 2, Anda dapat melanjutkan praktikum 3 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 2.
+
+### **Langkah 1: Buka pizza.dart dan Buat Konstanta**
+Di bagian atas file pizza.dart, di luar class Pizza, deklarasikan konstanta untuk setiap kunci JSON.
+```dart
+const keyId = 'id';
+const keyName = 'pizzaName';
+const keyDescription = 'description';
+const keyPrice = 'price';
+const keyImage = 'imageUrl';
+```
+
+### **Langkah 2: Perbarui fromJson() menggunakan Konstanta**
+Di constructor Pizza.fromJson, ganti semua string literal kunci JSON (misalnya 'id') dengan konstanta yang sesuai (keyId).
+```dart
+Pizza.fromJson(Map<String, dynamic> json) {
+  id = int.tryParse(json[keyId].toString()) ?? 0;
+  
+  pizzaName = 
+      json[keyName] != null ? json[keyName].toString() : 'No name';
+      
+  description =
+      (json[keyDescription] != null) ? json[keyDescription].toString() : '';
+      
+  price = double.tryParse(json[keyPrice].toString()) ?? 0;
+  
+  imageUrl = json[keyImage] ?? '';
+}
+```
+
+>**Catatan**: Konstruktor ini menggunakan sintaks inisialisasi, tetapi untuk kesederhanaan, kita menggunakan sintaks body.
+
+### **Langkah 3: Perbarui toJson() menggunakan Konstanta**
+Perbarui juga method toJson() agar menggunakan konstanta yang sama.
+```dart
+Map<String, dynamic> toJson() {
+  return {
+    keyId: id,
+    keyName: pizzaName,
+    keyDescription: description,
+    keyPrice: price,
+    keyImage: imageUrl,
+  };
+}
+```
+
+### **Langkah 4: Run**
+Jalankan aplikasi. Tidak akan ada perubahan visual, tetapi kode Anda kini lebih safe dan maintainable.
+
+![alt text](<img/hasil_praktikum3_Soal 5.png>)
+
+>#### **Soal 5**
+>* Jelaskan maksud kode lebih safe dan maintainable!
+>
+>**Jawab:**
+>
+>Menggunakan konstanta untuk JSON keys membuat kode menjadi lebih **safe (aman)** dan **maintainable (mudah dipelihara)** karena beberapa alasan berikut:
+>
+>#### **1. Safe (Aman) - Mencegah Runtime Errors**
+>
+>**a. Compile-Time Error Detection**
+>```dart
+>// ❌ SEBELUM - Error baru ketahuan saat runtime
+>json['pizzaName']  // Jika typo: json['pizaName'] → runtime error (sulit di-debug)
+>
+>// ✅ SESUDAH - Error langsung ketahuan saat compile
+>json[keyName]      // Jika typo: json[keyNam] → compile error (mudah diperbaiki)
+>```
+>
+>**b. Autocomplete & IntelliSense**
+>- IDE memberikan suggestion untuk konstanta
+>- Mengurangi kemungkinan typo karena bisa menggunakan autocomplete
+>- Ctrl+Click untuk langsung ke deklarasi konstanta
+>
+>**c. Type Safety**
+>```dart
+>// Konstanta memiliki tipe yang jelas
+>const keyId = 'id';  // String type
+>// Tidak bisa accidentally menggunakan tipe lain
+>```
+>
+>#### **2. Maintainable (Mudah Dipelihara)**
+>
+>**a. Single Source of Truth (SSOT)**
+>```dart
+>// Semua kunci JSON didefinisikan di SATU tempat
+>const keyId = 'id';
+>const keyName = 'pizzaName';
+>const keyDescription = 'description';
+>const keyPrice = 'price';
+>const keyImage = 'imageUrl';
+>
+>// Jika API berubah, cukup update di satu tempat saja!
+>```
+>
+>**b. Refactoring yang Aman dan Cepat**
+>```dart
+>// Skenario: Backend mengubah 'pizzaName' menjadi 'name'
+>
+>// ❌ TANPA KONSTANTA - Harus update banyak tempat
+>Pizza.fromJson(Map<String, dynamic> json) {
+>  pizzaName = json['pizzaName'];  // ← Update 1
+>}
+>Map<String, dynamic> toJson() {
+>  return {'pizzaName': pizzaName};  // ← Update 2
+>}
+>// ... masih banyak lagi di file lain
+>
+>// ✅ DENGAN KONSTANTA - Update 1 tempat saja
+>const keyName = 'name';  // ← Update HANYA di sini
+>// Semua penggunaan keyName otomatis terupdate!
+>```
+>
+>**c. Dokumentasi Implicit**
+>```dart
+>// Konstanta berfungsi sebagai dokumentasi
+>const keyId = 'id';           // Field untuk ID
+>const keyName = 'pizzaName';  // Field untuk nama pizza
+>const keyPrice = 'price';     // Field untuk harga
+>
+>// Developer baru bisa langsung tahu struktur JSON
+>```
+>
+>**d. Code Search & Navigation**
+>- Mudah mencari semua penggunaan key tertentu
+>- Cukup "Find All References" pada konstanta `keyName`
+>- Akan menampilkan semua tempat yang menggunakan `keyName`
+>
+>#### **3. Perbandingan Praktis**
+>
+>| Aspek | Tanpa Konstanta | Dengan Konstanta |
+>|-------|-----------------|------------------|
+>| **Bug Risk** | High (typo tidak terdeteksi) | Low (compile check) |
+>| **Refactoring Time** | 30+ menit | 2 menit |
+>| **Code Search** | Sulit (string search) | Mudah (find references) |
+>| **Onboarding** | Lambat (cari manual) | Cepat (lihat konstanta) |
+>| **Testing** | Complex | Simple |
+>| **IDE Support** | Limited | Full (autocomplete) |
+>
+>#### **4. Contoh Error yang Dicegah**
+>
+>**Skenario 1: Typo saat Development**
+>```dart
+>// ❌ TANPA KONSTANTA
+>json['descripton']  // ❌ Typo! Tidak ketahuan sampai runtime
+>// Error: "The getter 'descripton' isn't defined"
+>// Sulit di-debug karena bisa di mana saja
+>
+>// ✅ DENGAN KONSTANTA
+>json[keyDescrption]  // ❌ Typo! Langsung error saat compile
+>// Error: "Undefined name 'keyDescrption'"
+>// Mudah diperbaiki: ubah ke keyDescription
+>```
+>
+>**Skenario 2: Inkonsistensi Antar Method**
+>```dart
+>// ❌ TANPA KONSTANTA - Rawan inkonsisten
+>Pizza.fromJson(Map<String, dynamic> json) {
+>  pizzaName = json['pizzaName'];  // Pakai 'pizzaName'
+>}
+>Map<String, dynamic> toJson() {
+>  return {'pizza_name': pizzaName};  // ❌ Pakai 'pizza_name' (berbeda!)
+>}
+>
+>// ✅ DENGAN KONSTANTA - Konsistensi terjamin
+>Pizza.fromJson(Map<String, dynamic> json) {
+>  pizzaName = json[keyName];  // Pakai keyName
+>}
+>Map<String, dynamic> toJson() {
+>  return {keyName: pizzaName};  // Pakai keyName (konsisten!)
+>}
+>```
+>
+>#### **5. Analogi Real World**
+>
+>Bayangkan Anda memiliki 10 cabang restoran:
+>
+>**❌ Tanpa Konstanta (String Literal)**
+>```
+>Setiap cabang menulis menu sendiri dengan tulisan tangan
+>- Cabang 1: "Pizza Margherita"
+>- Cabang 2: "Piza Margherita"  ← Typo!
+>- Cabang 3: "Pizza Margarita"  ← Beda spelling!
+>```
+>**Masalah:** Inkonsistensi, sulit update, customer bingung
+>
+>**✅ Dengan Konstanta**
+>```
+>Ada template menu standar yang diprint dan dibagikan ke semua cabang
+>- Semua cabang pakai template yang sama
+>- Mau update? Cukup update template pusat
+>- Distribusi otomatis
+>```
+>**Keuntungan:** Konsistensi terjamin, update mudah, tidak ada typo
+>
+>#### **Kesimpulan**
+>
+>Menggunakan konstanta untuk JSON keys adalah **investment kecil** (5-10 menit membuat konstanta) untuk **benefit besar** (menghemat banyak waktu debugging dan maintenance di masa depan). Ini adalah **best practice industry standard** yang membuat kode lebih professional, robust, dan siap untuk production.
+>
+>* Capture hasil praktikum Anda dan lampirkan di README.
+>* Lalu lakukan commit dengan pesan **"W13: Jawaban Soal 5"**.
