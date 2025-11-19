@@ -9,6 +9,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,10 +47,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  String convertToJSON(List<Pizza> pizzas) {
+    return jsonEncode(pizzas.map((pizza) => pizza.toJson()).toList());
+  }
+
   Future<List<Pizza>> readJsonFile() async {
     String myString = await DefaultAssetBundle.of(
       context,
-    ).loadString('assets/pizzalist.json');
+    ).loadString('assets/pizzalist_broken.json');
 
     List pizzaMapList = jsonDecode(myString);
 
@@ -59,6 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
       myPizzas.add(myPizza);
     }
 
+    String json = convertToJSON(myPizzas);
+    print(json);
     return myPizzas;
   }
 

@@ -303,3 +303,138 @@ Jalankan aplikasi. Sekarang, Anda akan melihat data pizza ditampilkan dalam daft
 >### **Soal 3**
 >* Masukkan hasil capture layar ke laporan praktikum Anda.
 >* Lakukan commit hasil jawaban Soal 2 dengan pesan **"W13: Jawaban Soal 3"**
+
+### **Langkah 23: Tambahkan Method toJson() (Serialization)**
+Di file pizza.dart, tambahkan method toJson() ke class Pizza. Method ini berfungsi untuk mengonversi objek Dart kembali menjadi Map (langkah pertama menuju JSON String).
+```dart
+Map<String, dynamic> toJson() {
+  return {
+    'id': id,
+    'pizzaName': pizzaName,
+    'description': description,
+    'price': price,
+    'imageUrl': imageUrl,
+  };
+}
+```
+
+### **Langkah 24: Buat Fungsi Konversi JSON String**
+Di main.dart, tambahkan fungsi convertToJSON di dalam _MyHomePageState untuk menggunakan jsonEncode (dari dart:convert) yang mengubah List objek Dart menjadi JSON String.
+```dart
+String convertToJSON(List<Pizza> pizzas) {
+  return jsonEncode(pizzas.map((pizza) => jsonEncode(pizza)).toList());
+}
+```
+
+### **Langkah 25: Tampilkan Output JSON di Konsol**
+Di method readJsonFile(), tambahkan kode untuk memanggil convertToJSON dan mencetak hasilnya ke Debug Console sebelum mengembalikan myPizzas.
+```dart
+String json = convertToJSON(myPizzas);
+print(json);
+return myPizzas;
+```
+
+Langkah 26: Cek Output Konsol
+Jalankan aplikasi. Periksa Debug Console untuk melihat List objek Pizza telah berhasil dikonversi kembali menjadi JSON String.
+
+![alt text](img/output_konsol.png)
+
+## **Praktikum 2: Handle kompatibilitas data JSON**
+Setelah Anda menyelesaikan praktikum 1, Anda dapat melanjutkan praktikum 2 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+>**Perhatian**: Diasumsikan Anda telah berhasil menyelesaikan Praktikum 1.
+
+Pada codelab ini, kita akan berfokus pada skema JSON yang tidak kompatibel dengan model yang telah kita buat sebelumnya. Kita akan membuat kode lebih tangguh dengan menangani type casting dan nilai null.
+
+>**Catatan**: Langkah-langkah ini mensimulasikan penggunaan data JSON yang tidak konsisten atau "rusak" (`pizzalist_broken.json`).
+
+### **Langkah 1: Simulasikan Error**
+Anggaplah Anda telah mengganti file `pizzalist.json` dengan data yang tidak konsisten.
+
+### **Langkah 2: Lihat Error Tipe Data String ke Int**
+Jika ID pizza di JSON dikirim sebagai String (misalnya `"id": "1"` di JSON) sementara model Dart mengharapkan int, Anda akan melihat runtime error.
+```dart
+pizza.fromJson(Map<string, dynamic> json) {
+  this.id = json['id'];
+}
+```
+
+### **Langkah 3: Terapkan tryParse dan Null Coalescing pada ID**
+Di Pizza.fromJson (file pizza.dart), ganti cara mendapatkan nilai id menggunakan int.tryParse dan null coalescing operator (??) untuk memberikan nilai default 0 jika parsing gagal atau nilainya null. Tujuannya adalah memastikan nilai id selalu integer.
+```dart
+int.tryParse(json['id'].toString()) ?? 0;
+```
+
+### **Langkah 4: Simulasikan Error Null pada String**
+Jika Anda menjalankan ulang dan ada bidang yang hilang (misalnya imageUrl hilang), Anda mungkin mendapatkan error Null.
+```dart
+Pizza.fromJson(Map<String, dynamic> json)
+    id = int.tryParse(json['id']) ?? 0,
+    pizzaName = json['pizzaName'],
+    description = json['description'],
+    price = json['price'],
+    imageUrl = json['imageUrl'];
+```
+
+### **Langkah 5: Terapkan Null Coalescing pada String**
+Tambahkan null coalescing operator (??) pada imageUrl untuk memberikan string kosong ('') jika nilai yang diterima adalah null. Lakukan hal yang sama untuk bidang String lainnya seperti pizzaName dan description jika perlu.
+```dart
+imageUrl = json['imageUrl'] ?? '';
+```
+
+### **Langkah 6: Gunakan toString() untuk Field String**
+Untuk memastikan semua nilai yang digunakan sebagai String benar-benar String (bahkan jika mereka mungkin dikirim sebagai int atau tipe lain), gunakan toString().
+```dart
+Pizza.fromJson(Map<String, dynamic> json) {
+  id = json['id'];
+  pizzaName = json['pizzaName'].toString();
+  description = json['description'].toString();
+  price = json['price'];
+  imageUrl = json['imageUrl'] ?? '';
+}
+```
+
+### **Langkah 7: Simulasikan Error Tipe Data String ke Double**
+Jika Anda menjalankan ulang, Anda mungkin menemukan error saat mengonversi String ke Double untuk bidang price.
+```dart
+this.price = json[keyPrice];
+```
+
+### **Langkah 8: Terapkan double.tryParse**
+Terapkan double.tryParse dengan null coalescing (?? 0) untuk bidang price, sama seperti yang Anda lakukan pada id.
+```dart
+Pizza.fromJson(Map<String, dynamic> json) {
+  id = int.tryParse(json['id'].toString());
+  pizzaName = json['pizzaName'].toString();
+  description = json['description'].toString();
+  price = double.tryParse(json['price'].toString()) ?? 0;
+  imageUrl = json['imageUrl'].toString();
+}
+```
+
+### **Langkah 9: Run dan Perhatikan Output Null**
+Setelah mengimplementasikan semua perbaikan tipe data, aplikasi akan berjalan, tetapi mungkin menampilkan "null" di UI jika ada bidang yang hilang atau gagal diparsing (seperti pizzaName atau description).
+
+![alt text](img/output_null.png)
+
+### **Langkah 10: Tambahkan Operator Ternary untuk Output User-Friendly**
+Perbaiki masalah tampilan "null" dengan menambahkan operator ternary yang memeriksa apakah nilai null sebelum mengubahnya menjadi String. Jika null, berikan nilai pengganti yang ramah pengguna seperti 'No name' atau string kosong ('').
+```dart
+Pizza.fromJson(Map<String, dynamic> json) {
+  id = int.tryParse(json['id'].toString()) ?? 0;
+  pizzaName = json['pizzaName'] != null ? json['pizzaName'].toString() : 'No name';
+  description = 
+      (json['description'] != null) ? json['description'].toString() : '';
+  price = double.tryParse(json['price'].toString()) ?? 0;
+  imageUrl = json['imageUrl'] ?? '';
+}
+```
+
+### **Langkah 11: Run**
+Jalankan aplikasi. Sekarang data yang tidak konsisten telah ditangani dengan baik, dan UI tidak menampilkan nilai null.
+
+![alt text](<img/hasil_praktikum2_Soal 4.png>)
+
+>#### **Soal 4**
+>* Capture hasil running aplikasi Anda, kemudian impor ke laporan praktikum Anda!
+>* Lalu lakukan commit dengan pesan **"W13: Jawaban Soal 4"**.
